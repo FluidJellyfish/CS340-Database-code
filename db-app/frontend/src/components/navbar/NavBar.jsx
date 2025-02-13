@@ -9,14 +9,14 @@ const Navbar = () => {
           <MdLocalConvenienceStore size={80} />
         </Link>
       </div>
-      <h1>My website name</h1>
+      <h1>Pokemon Showdown Database</h1>
       <nav>
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/">Pokemon</Link>
           </li>
           <li>
-            <Link to="/people">BSG People</Link>
+            <Link to="/trainers">Trainers</Link>
           </li>
         </ul>
       </nav>
