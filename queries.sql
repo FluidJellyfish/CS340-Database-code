@@ -1,11 +1,14 @@
 --list of queries
---update team (done)
---display team (done)
---display gym + leader (done) (displaying leader's team would be done with query above it)
---display the two trainers that will battle (done?)
---choose pokemon moves (done kinda)
---display pokemon information (done)
---change gym leader (done)
+--update team
+--display team
+--display gym
+--display the two trainers that will battle
+--choose pokemon moves
+--display pokemon information
+--change gym leader
+--Delete trainers out of battle to prep it for the next one
+--Delete moves off of a pokemon
+--Delete pokemon off of a trainers team
 
 
 --displays trainers team based on trainer id. 
@@ -52,6 +55,18 @@ UPDATE Gyms
 SET gym_leader_id = gym_leader_id_from_form
 WHERE gym_id = gym_id_from_form
 
+
+--delete trainer from Battles
+DELETE FROM Battles
+WHERE trainer_1_id = trainer_1_id_from_form AND trainer_2_id = trainer_2_id_from_form
+
+--deletes a move from the pokemon
+DELETE FROM Pokemon_Moves
+WHERE move_name = move_name_from_form && pokemon_id = pokemon_id_from_form
+
+--delete pokemon from a trainers team
+DELETE FROM Pokemon_Trainers
+WHERE pokemon_id = pokmon_id_from_form AND trainer_id = trainer_1_id_from_form
 
 
 
