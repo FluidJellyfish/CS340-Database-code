@@ -18,6 +18,9 @@ const Navbar = () => {
           <li>
             <Link to="/trainers">Trainers</Link>
           </li>
+          <li>
+            <Link to="/moves">Moves</Link>
+          </li>
         </ul>
       </nav>
     </header>
