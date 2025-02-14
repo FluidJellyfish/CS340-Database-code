@@ -1,7 +1,23 @@
-function NewTrainerPage() {
+const POKEMONNAMES = [
+    "Pikachu",
+    "Charmander",
+    "Bulbasaur",
+    "Squirtle",
+    "Jigglypuff"
+];
+
+const TRAINERIDS = [
+    1,
+    2,
+    3,
+    4,
+    5
+];
+
+function NewTrainerPage({pokemonNames=POKEMONNAMES, trainerIds=TRAINERIDS}) {
     return (
         <div>
-            <h1>Add a New Trainer</h1>
+            <h2>Add a New Trainer</h2>
             <form className="trainer-input">
             <table>
                 <thead>
@@ -17,7 +33,7 @@ function NewTrainerPage() {
             </table> 
             <button type="submit">Add Trainer</button>
             </form>
-            <h1>Add a Pokemon to a Trainer's Team</h1>
+            <h2>Add a Pokemon to a Trainer's Team</h2>
             <form className="trainer-team-edit">
             <table>
                 <thead>
@@ -28,8 +44,20 @@ function NewTrainerPage() {
                 </thead>
                 <tbody>
                     <tr>
-                        <td><input type="text" name="newPokemonId"/></td>
-                        <td><input type="text" name="newTrainerId"/></td>
+                    <td>
+                    <select name="newPokemonName">
+                        {pokemonNames.map((name, index) => (
+                            <option key={index} value={name}>{name}</option>
+                        ))}
+                    </select>
+                    </td>
+                    <td>
+                    <select name="newPokemonTrainerID">
+                        {trainerIds.map((id, index) => (
+                            <option key={index} value={id}>{id}</option>
+                        ))}
+                    </select>
+                    </td>
                     </tr>
                 </tbody>
             </table>

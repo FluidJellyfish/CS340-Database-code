@@ -1,9 +1,26 @@
 import TypeInput from "../components/TypeInput";
 
-function NewPokemonPage() {
+
+const POKEMONNAMES = [
+    "Pikachu",
+    "Charmander",
+    "Bulbasaur",
+    "Squirtle",
+    "Jigglypuff"
+];
+
+const MOVENAMES = [
+    "Thunderbolt",
+    "Flamethrower",
+    "Vine Whip",
+    "Water Gun",
+    "Sing"
+];
+
+function NewPokemonPage({pokemonNames=POKEMONNAMES, moveNames=MOVENAMES}) {
     return (
         <div>
-            <h1>Add a New Pokemon</h1>
+            <h2>Add a New Pokemon</h2>
             <form className="pokemon-input">
             <table>
                 <thead>
@@ -22,6 +39,36 @@ function NewPokemonPage() {
                 </tbody>
             </table> 
             <button type="submit">Add Pokemon</button>
+            </form>
+            <h2>Add a Move to a Pokemon's Moveset</h2>
+            <form className="pokemon-moveset-edit">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pokemon Name</th>
+                        <th>Move Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                        <select name="newMovePokemonName">
+                            {pokemonNames.map((name, index) => (
+                                <option key={index} value={name}>{name}</option>
+                            ))}
+                        </select>
+                        </td>
+                        <td>
+                        <select name="newMoveName">
+                            {moveNames.map((name, index) => (
+                                <option key={index} value={name}>{name}</option>
+                            ))}
+                        </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="submit">Add Move to Pokemon</button>
             </form>
         </div>
     );

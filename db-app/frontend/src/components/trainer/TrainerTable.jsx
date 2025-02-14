@@ -18,6 +18,14 @@ function NewTrainerButton() {
     );
 }
 
+function UpdateTrainerFieldButton() {
+    return (
+        <Link to="/trainers/update">
+            <button>Update trainer</button>
+        </Link>
+    );
+}
+
 export default function TrainerTable({ trainers }) {
 
     return (
