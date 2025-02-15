@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 function PokemonTrainerRow({pokemonTrainer}){
     return (
         <tr>
-            <td>{pokemonTrainer.pokemon_id}</td>
             <td>{pokemonTrainer.trainer_id}</td>
+            <td>{pokemonTrainer.pokemon_id}</td>
+            <td>{pokemonTrainer.pokemon_name}</td>
             <td><DeletePokemonFromTeamButton /></td>
         </tr>
     );
@@ -40,15 +41,18 @@ function TrainerFilterField({ trainerIds }) {
 }
 
 export default function PokemonTrainerTable({pokemonTrainers}) {
+    const uniqueTrainerIds = [...new Set(pokemonTrainers.map(item => item.trainer_id))];
+
     return (
         <div>
-            <TrainerFilterField trainerIds={pokemonTrainers.map(({ trainer_id }) => trainer_id )}/>
+            <TrainerFilterField trainerIds={uniqueTrainerIds}/>
             <NewTrainerButton />
             <table>
                 <thead>
                     <tr>
-                        <th>Pokemon ID</th>
                         <th>Trainer ID</th>
+                        <th>Pokemon ID</th>
+                        <th>Pokemon Name</th>
                     </tr>
                 </thead>
                 <tbody>

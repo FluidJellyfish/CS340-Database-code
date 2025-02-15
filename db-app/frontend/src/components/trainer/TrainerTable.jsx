@@ -5,7 +5,9 @@ function TrainerRow({ trainer }) {
         <tr>
         <td>{trainer.id}</td>
         <td>{trainer.items_held}</td>
+        <td><UpdateItemHeldField /></td>
         <td>{trainer.battle_record}</td>
+        <td><UpdateBattleRecordField /></td>
         </tr>
     );
 }
@@ -18,11 +20,21 @@ function NewTrainerButton() {
     );
 }
 
-function UpdateTrainerFieldButton() {
+function UpdateBattleRecordField() {
     return (
-        <Link to="/trainers/update">
-            <button>Update trainer</button>
-        </Link>
+        <form>
+            <input type="number" placeholder="New Battle Record" />
+            <button type="submit">Update</button>
+        </form>
+    );
+}
+
+function UpdateItemHeldField() {
+    return (
+        <form>
+            <input type="text" placeholder="New Item Held" />
+            <button type="submit">Update</button>
+        </form>
     );
 }
 
@@ -35,8 +47,10 @@ export default function TrainerTable({ trainers }) {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Items Held</th>
+                        <th>Item Held</th>
+                        <th></th>
                         <th>Battle Record</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

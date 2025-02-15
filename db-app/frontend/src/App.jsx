@@ -7,6 +7,8 @@ import TrainerPage from "./pages/TrainerPage";
 import NewTrainerPage from "./pages/NewTrainerPage";
 import MovePage from "./pages/MovePage";
 import NewMovePage from "./pages/NewMovePage";
+import BattlePage from "./pages/BattlePage";
+import GymPage from "./pages/GymPage";
 
 function App() {
   return (
@@ -20,6 +22,9 @@ function App() {
         <Route path="/trainers/new" element={<NewTrainerPage />} />
         <Route path="/moves" element={<MovePage />} />
         <Route path="/moves/new" element={<NewMovePage />} />
+        <Route path="/battles" element={<BattlePage />} />
+        <Route path="/gyms" element={<GymPage />} />
+        
       </Routes>
     </>
   );

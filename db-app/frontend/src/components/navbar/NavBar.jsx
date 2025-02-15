@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { MdLocalConvenienceStore } from "react-icons/md";
+import logo from '../../assets/ult.png';
 
 const Navbar = () => {
   return (
     <header>
       <div>
         <Link to="/">
-          <MdLocalConvenienceStore size={80} />
+          <img src={logo} alt="Ultraball" width={80} height={80}/>
         </Link>
       </div>
       <h1>Pokemon Showdown Database</h1>
@@ -20,6 +20,12 @@ const Navbar = () => {
           </li>
           <li>
             <Link to="/moves">Moves</Link>
+          </li>
+          <li>
+            <Link to="/battles">Battles</Link>
+          </li>
+          <li>
+            <Link to="/gyms">Gyms</Link>
           </li>
         </ul>
       </nav>
