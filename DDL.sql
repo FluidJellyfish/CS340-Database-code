@@ -38,7 +38,7 @@ CREATE OR REPLACE TABLE Pokemon_Trainers (
 
 CREATE OR REPLACE TABLE Gyms (
     gym_id int NOT NULL AUTO_INCREMENT,
-    gym_leader_id int NOT NULL,
+    gym_leader_id int,
     PRIMARY KEY (gym_id),
     FOREIGN KEY (gym_leader_id) REFERENCES Trainers(trainer_id) ON DELETE CASCADE
 );
