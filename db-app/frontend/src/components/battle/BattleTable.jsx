@@ -19,7 +19,7 @@ export default function BattleTable({ battles }) {
                         <th>ID</th>
                         <th>Trainer 1 ID</th>
                         <th>Trainer 2 ID</th>
-                        <th>Winner</th>
+                        <th>Result</th>
                     </tr>
                 </thead>
                 <tbody>

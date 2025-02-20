@@ -1,4 +1,4 @@
-const TRAINER_IDS = [1, 2, 3, 4, 5];
+const TRAINER_IDS = ["NULL", 1, 2, 3, 4, 5];
 
 function NewGymField({trainer_ids = TRAINER_IDS}) {
     return (

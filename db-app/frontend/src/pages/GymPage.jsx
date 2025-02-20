@@ -3,7 +3,8 @@ import NewGymField from "../components/gym/NewGymField";
 
 const GYMS = [
     {id: 1, gym_leader_id: 2},
-    {id: 2, gym_leader_id: 3}
+    {id: 2, gym_leader_id: 3},
+    {id: 3, gym_leader_id: "NULL"}
 ];
 
 export default function GymPage() {
