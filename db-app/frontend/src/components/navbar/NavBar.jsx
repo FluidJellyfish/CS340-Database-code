@@ -1,3 +1,5 @@
+// Adapted from React Starter Guide https://github.com/osu-cs340-ecampus/react-starter-app
+
 import { Link } from "react-router-dom";
 import logo from '../../assets/ult.png';
 

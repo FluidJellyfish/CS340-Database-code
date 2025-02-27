@@ -1,3 +1,5 @@
+// Adapted from React Starter Guide https://github.com/osu-cs340-ecampus/react-starter-app
+
 // Load db config
 const db = require("../database/config");
 // Load .env variables

@@ -1,5 +1,4 @@
-// reactServer.cjs
-// Uses common javascript to serve the react build folder (/dist)
+// Adapted from React Starter Guide https://github.com/osu-cs340-ecampus/react-starter-app
 
 const express = require('express');
 const path = require('path');

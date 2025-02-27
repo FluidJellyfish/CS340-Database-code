@@ -8,8 +8,7 @@
     "serve": "npx forever start server.js"
   },
   "contributors": [
-    "Devin Daniels <https://github.com/devingdaniels>",
-    "Zac Maes <https://github.com/zacmaes>"
+    "Izzy Lerman & Samuel Di Lullo"
   ],
   "license": "ISC",
   "dependencies": {

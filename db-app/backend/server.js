@@ -1,3 +1,5 @@
+// Adapted from React Starter Guide https://github.com/osu-cs340-ecampus/react-starter-app
+
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();

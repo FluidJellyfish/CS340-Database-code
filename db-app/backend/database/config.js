@@ -1,3 +1,5 @@
+// Adapted from React Starter Guide https://github.com/osu-cs340-ecampus/react-starter-app
+
 // Get an instance of mysql we can use in the app
 const mysql = require("mysql2");
 require("dotenv").config();
@@ -8,8 +10,8 @@ const pool = mysql.createPool({
   waitForConnections: true,
   host: process.env.DB_HOST || "localhost",
   user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "your_default_password",
-  database: process.env.DB_DATABASE || "your_default_database",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_DATABASE || "cs340_lermani",
 });
 
 // Export it for use in our application

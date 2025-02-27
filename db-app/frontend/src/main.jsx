@@ -1,3 +1,5 @@
+// Adapted from React Starter Guide https://github.com/osu-cs340-ecampus/react-starter-app
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
