@@ -6,7 +6,7 @@ const {
   createPerson,
   updatePerson,
   deletePerson,
-} = require("../controllers/peopleController");
+} = require("../controllers/EXAMPLE_peopleController");
 
 router.get("/", getPeople);
 router.get("/:id", getPersonByID);

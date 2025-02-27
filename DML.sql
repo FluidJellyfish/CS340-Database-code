@@ -10,6 +10,12 @@
 -- Delete pokemon off of a trainers team
 
 
+-- Add a move to a Pokemon's moveset
+INSERT INTO Pokemon_Moves(pokemon_id, move_id) VALUES (
+    (SELECT Pokemon.pokemon_id FROM Pokemon WHERE Pokemon.pokemon_name = pokemon_name_from_form),
+    (SELECT Moves.move_id FROM Moves WHERE Moves.move_name = move_name_from_form)
+);
+
 -- displays trainers team based on trainer id. 
 SELECT Pokemon.pokemon_name, Trainers.items_held, Trainers.battle_record
 FROM Pokemon_Trainers

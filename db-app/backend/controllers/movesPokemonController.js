@@ -4,22 +4,30 @@ const db = require("../database/config");
 require("dotenv").config();
 const lodash = require("lodash");
 
-// Returns all rows of people in bsg_people
-const getPeople = async (req, res) => {
-  try {
-    // Select all rows from the "bsg_people" table
-    const query = "SELECT * FROM bsg_people";
-    // Execute the query using the "db" object from the configuration file
-    const [rows] = await db.query(query);
-    // Send back the rows to the client
-    res.status(200).json(rows);
-  } catch (error) {
-    console.error("Error fetching people from the database:", error);
-    res.status(500).json({ error: "Error fetching people" });
-  }
-};
+// (Create) Add a Move to a a Pokemon's moveset given its name
+// Returns status of DB action
+const addMoveToMoveset = async (req, res) => {
+    
+    const { pokemonName, moveName } = req.body
+    try {
+        const [rows] = await db.query(query);
+        const query = `INSERT INTO Pokemon_Moves(pokemon_id, move_id) VALUES (
+            (SELECT Pokemon.pokemon_id FROM Pokemon WHERE Pokemon.pokemon_name = ?),
+            (SELECT Moves.move_id FROM Moves WHERE Moves.move_name = ?));`;
 
-// Create a new entry in Moves-Pokemon
+        const response = await db.query(query, [
+            pokemonName,
+            moveName
+        ]);
+
+        res.status(201).json(response);
+    } catch (error) {
+        // Print error on dev side
+        console.error("Error creating person:", error);
+        // Client side error render
+        res.status(500).json({ error: "Error creating person" });
+    }
+};
 
 // Read all entries of Moves-Pokemon
 
@@ -28,3 +36,7 @@ const getPeople = async (req, res) => {
 // Update a move assigned to a Pokemon given by its name
 
 // Delete an entry in Moves-Pokemon
+
+module.exports = {
+    addMoveToMoveset
+};
