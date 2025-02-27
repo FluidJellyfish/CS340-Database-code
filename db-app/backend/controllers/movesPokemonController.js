@@ -30,10 +30,40 @@ const addMoveToMoveset = async (req, res) => {
 };
 
 // Read all entries of Moves-Pokemon
+const getPokemonMoves = async(req, res) => {
+    try{
+        const pokemonMovesID = erq.params.id;
+        const query = "SELECT * FROM Pokemon_Moves";
+        //executes the query
+        const [rows] = await db.query(query)
+        //send rows back
+        res.status(200).json(rows);
+    } catch(error) {
+        console.error("Error fetching Pokemon Moves from the db: ", error);
+        res.status(500).json({error: "Error fetching Pokemon Moves"});
+    }
+};
 
-// Read the moves of a Pokemon given by its name
+// Read the moves of a Pokemon given by its ID
+const getMovesByPokemonID = async (req, res) => {
+    try{
+        const pokemonMovesID = req.params.id;
+        const query = "SELECT * WHERE pokmone_moves_id = ?";
+        const [result] = await db.query(query, [pokmonMovesID]);
 
-// Update a move assigned to a Pokemon given by its name
+        if (result.length == 0){
+            return res.status(404).json({error: "Pokemon move not found" });
+        }
+        const move = result[0]
+        res.json(move);
+    } catch(error){
+        console.error("Error fetching move from db: ", error);
+        res.status(500).json({error: "Error fetching move"});
+    }
+
+};
+
+// Update a move assigned to a Pokemon given by its ID
 const updateMoveInMoveset = async (req, res) => {
 
     //gets pokemon_moves_id
@@ -77,7 +107,7 @@ const updateMoveInMoveset = async (req, res) => {
     }
 
 
-}
+};
 
 // Delete an entry in Moves-Pokemon
 const deleteMove = async (req, res) => {
@@ -110,10 +140,12 @@ const deleteMove = async (req, res) => {
         console.error("Error deleting move from database: ", error);
         res.status(500).json({error: error.message});
     }
-}
+};
 
 module.exports = {
     addMoveToMoveset,
+    getPokemonMoves,
+    getMovesByPokemonID,
     updateMoveInMoveset,
     deleteMove,
 };

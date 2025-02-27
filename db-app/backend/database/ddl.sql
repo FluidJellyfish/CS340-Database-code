@@ -1,121 +1,106 @@
--- Disable foreign key checks temporarily
-SET
-    foreign_key_checks = 0;
+SET FOREIGN_KEY_CHECKS=0;
+SET AUTOCOMMIT = 0;
 
--- Planets table
-DROP TABLE IF EXISTS `bsg_planets`;
 
-CREATE TABLE `bsg_planets` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `population` BIGINT(20) DEFAULT NULL,
-    `language` VARCHAR(255) DEFAULT NULL,
-    `capital` VARCHAR(255) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `name` (`name`)
+CREATE OR REPLACE TABLE Trainers (
+    trainer_id int NOT NULL AUTO_INCREMENT,
+    item_held varchar(50) NOT NULL,
+    battle_record int(11) NOT NULL,
+    PRIMARY KEY (trainer_id)
 );
 
-INSERT INTO
-    `bsg_planets` (
-        `id`,
-        `name`,
-        `population`,
-        `language`,
-        `capital`
-    )
-VALUES
-    (
-        1,
-        'Gemenon',
-        2800000000,
-        'Old Gemenese',
-        'Oranu'
-    ),
-    (2, 'Leonis', 2600000000, 'Leonese', 'Luminere'),
-    (
-        3,
-        'Caprica',
-        4900000000,
-        'Caprican',
-        'Caprica City'
-    ),
-    (7, 'Sagittaron', 1700000000, NULL, 'Tawa'),
-    (16, 'Aquaria', 25000, NULL, NULL),
-    (17, 'Canceron', 6700000000, NULL, 'Hades'),
-    (18, 'Libran', 2100000, NULL, NULL),
-    (19, 'Picon', 1400000000, NULL, 'Queestown'),
-    (20, 'Scorpia', 450000000, NULL, 'Celeste'),
-    (21, 'Tauron', 2500000000, 'Tauron', 'Hypatia'),
-    (22, 'Virgon', 4300000000, NULL, 'Boskirk');
-
--- Certification table
-DROP TABLE IF EXISTS `bsg_cert`;
-
-CREATE TABLE `bsg_cert` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `title` VARCHAR(255) NOT NULL,
-    PRIMARY KEY (`id`)
+CREATE OR REPLACE TABLE Battles (
+    battle_id int NOT NULL AUTO_INCREMENT,
+    trainer_1_id int NOT NULL,
+    trainer_2_id int NOT NULL,
+    result tinyint(1) NOT NULL,
+    PRIMARY KEY(battle_id),
+    FOREIGN KEY (trainer_1_id) REFERENCES Trainers(trainer_id) ON DELETE CASCADE,
+    FOREIGN KEY (trainer_2_id) REFERENCES Trainers(trainer_id) ON DELETE CASCADE
 );
 
-INSERT INTO
-    `bsg_cert` (`id`, `title`)
-VALUES
-    (1, 'Raptor'),
-    (2, 'Viper'),
-    (3, 'Mechanic'),
-    (4, 'Command');
-
--- People table
-DROP TABLE IF EXISTS `bsg_people`;
-
-CREATE TABLE `bsg_people` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `fname` VARCHAR(255) NOT NULL,
-    `lname` VARCHAR(255) DEFAULT NULL,
-    `homeworld` INT(11) DEFAULT NULL,
-    `age` INT(11) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `homeworld` (`homeworld`),
-    CONSTRAINT `bsg_people_ibfk_1` FOREIGN KEY (`homeworld`) REFERENCES `bsg_planets` (`id`) ON DELETE
-    SET
-        NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 DEFAULT CHARSET = latin1;
-
-INSERT INTO
-    `bsg_people` (`id`, `fname`, `lname`, `homeworld`, `age`)
-VALUES
-    (1, 'William', 'Adama', 3, 61),
-    (2, 'Lee', 'Adama', 3, 30),
-    (3, 'Laura', 'Roslin', 3, NULL),
-    (4, 'Kara', 'Thrace', 3, NULL),
-    (5, 'Gaius', 'Baltar', 3, NULL),
-    (6, 'Saul', 'Tigh', NULL, 71),
-    (7, 'Karl', 'Agathon', 1, NULL),
-    (8, 'Galen', 'Tyrol', 1, 32),
-    (9, 'Callandra', 'Henderson', NULL, NULL);
-
--- Certification-People relationship table
-CREATE TABLE `bsg_cert_people` (
-    `cid` INT(11) NOT NULL DEFAULT '0',
-    `pid` INT(11) NOT NULL DEFAULT '0',
-    PRIMARY KEY (`cid`, `pid`),
-    KEY `pid` (`pid`),
-    CONSTRAINT `bsg_cert_people_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `bsg_cert` (`id`),
-    CONSTRAINT `bsg_cert_people_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `bsg_people` (`id`)
+CREATE OR REPLACE TABLE Pokemon (
+    pokemon_id int NOT NULL AUTO_INCREMENT,
+    pokemon_name varchar(20) NOT NULL,
+    pokemon_type varchar(20) NOT NULL,
+    health int(10) NOT NULL,
+    PRIMARY KEY (pokemon_id)
+);
+-- intersection table
+CREATE OR REPLACE TABLE Pokemon_Trainers (  
+    pokemon_trainer_id int NOT NULL AUTO_INCREMENT,
+    pokemon_id int NOT NULL,
+    trainer_id int NOT NULL,
+    PRIMARY KEY (pokemon_trainer_id),
+    FOREIGN KEY (pokemon_id) REFERENCES Pokemon(pokemon_id) ON DELETE CASCADE,
+    FOREIGN KEY (trainer_id) REFERENCES Trainers(trainer_id) ON DELETE CASCADE
 );
 
-INSERT INTO
-    `bsg_cert_people` (`cid`, `pid`)
-VALUES
-    (2, 2),
-    (4, 2),
-    (4, 3),
-    (2, 4),
-    (4, 6),
-    (1, 7),
-    (3, 8),
-    (3, 9);
+CREATE OR REPLACE TABLE Gyms (
+    gym_id int NOT NULL AUTO_INCREMENT,
+    gym_leader_id int,
+    PRIMARY KEY (gym_id),
+    FOREIGN KEY (gym_leader_id) REFERENCES Trainers(trainer_id) ON DELETE CASCADE
+);
 
--- Re-enable foreign key checks
-SET
-    foreign_key_checks = 1;
+CREATE OR REPLACE TABLE Moves (
+    move_id int NOT NULL AUTO_INCREMENT,
+    move_type varchar(10) NOT NULL,
+    move_dmg int(5) NOT NULL,
+    move_name char(15) NOT NULL,
+    PRIMARY KEY (move_id)
+);
+-- intersection table
+CREATE OR REPLACE TABLE Pokemon_Moves ( 
+    pokemon_moves_id int NOT NULL AUTO_INCREMENT,
+    pokemon_id int NOT NULL,
+    move_id int NOT NULL,
+    PRIMARY KEY (pokemon_moves_id),
+    FOREIGN KEY (move_id) REFERENCES Moves(move_id) ON DELETE CASCADE,
+    FOREIGN KEY (pokemon_id) REFERENCES Pokemon(pokemon_id) ON DELETE CASCADE
+);
+-- data
+INSERT INTO Pokemon (pokemon_name, pokemon_type, health)
+VALUES ("Farfetch'd", "Fighting", 80),
+("Bulbasaur", "Grass", 90),
+("Charmander", "Fire", 95);
+
+
+INSERT INTO Trainers (items_held, battle_record)
+VALUES ("Potion", 0),
+("Egg", 1),
+("Potion", 3),
+("Revive", 5);
+
+INSERT INTO Moves (move_type, move_dmg, move_name)
+VALUES("Fighting", 10, "Rock Smash"),
+("Fire", 12, "Fireball"),
+("Grass", 10, "Vine Whip");
+
+-- pokemon are assigned to trainers through Pokemon_Trainers based on their id number in their respective tables
+INSERT INTO Pokemon_Trainers(pokemon_id, trainer_id)
+VALUES(1,1),
+(2,2),
+(3,3);
+
+-- Moves are assinged to Pokemon through Pokemon_moves based on their id number in their respective tables
+INSERT INTO Pokemon_Moves(pokemon_id, move_id)
+VALUES(1,1),
+(2,3),
+(3,2);
+
+-- result is 1 for win or 0 for loss. Result is based on trainer_1
+INSERT INTO Battles(trainer_1_id,trainer_2_id, result)
+VALUES(1,2,1),
+(2,3,1),
+(3,1,1);
+
+INSERT INTO Gyms(gym_leader_id)
+VALUES(1),
+(2),
+(3);
+
+
+
+SET FOREIGN_KEY_CHECKS=1;
+COMMIT;

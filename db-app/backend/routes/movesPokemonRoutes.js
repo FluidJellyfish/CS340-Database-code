@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const {
-  addMoveToMoveset
+  addMoveToMoveset,
+  getPokemonMoves,
+  getMovesByPokemonID,
+  updateMoveInMoveset,
+  deleteMove,
 } = require("../controllers/movesPokemonController.js");
 
 
