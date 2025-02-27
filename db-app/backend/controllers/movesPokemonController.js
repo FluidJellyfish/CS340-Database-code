@@ -34,9 +34,86 @@ const addMoveToMoveset = async (req, res) => {
 // Read the moves of a Pokemon given by its name
 
 // Update a move assigned to a Pokemon given by its name
+const updateMoveInMoveset = async (req, res) => {
+
+    //gets pokemon_moves_id
+    const pokemonMovesID = req.params.id;
+    //gets Pokemon_Moves
+    const newMove = req.body;
+
+    try {
+        const [data] = await db.query("SELECT * FROM Pokemon_Moves WHERE pokemon_moves_id = ?", [
+            pokemonMovesID,
+        ]);
+
+        const oldMove = data[0];
+
+        //if oldData and newData differ perform updates
+        if(!lodash.isEqual(newMove, oldMove)){
+            const query = "UPDATE Pokemon_Moves SET pokemon_id = ?, move_id = ? WHERE pokemon_moves_id = ?";
+        
+
+        const values = [
+            newMoveData.pokemon_id,
+            newMoveData.move_id,
+            pokemonMovesID,
+
+        ];
+
+        //update
+        await db.query(query, values);
+
+        return res.json({message: "Pokemon move has been updated." });
+    }
+
+        res.json({message: "Move details are the same, no update" });
+        
+    } catch (error){
+        //server side
+        console.error("Error updating move set: ", error);
+
+        //client side error
+        res.status(500).json({error: "Error updating moveset."})
+    }
+
+
+}
 
 // Delete an entry in Moves-Pokemon
+const deleteMove = async (req, res) => {
+    console.log("Deleting Pokemon Move with ID: ", req.params.id);
+    const pokmonMovesID = req.params.id;
+
+    try{
+        //checks if move exists
+        const [isExisting] = await db.query(
+            "SELECT 1 FROM Pokemon_Moves WHERE pokemon_moves_id = ?", 
+            [pokemonMovesID]);
+
+        //if the move doesn't exist, return an error.
+        if(isExisting.length == 0) {
+            return res.status(404).send("Move not found");
+        }
+
+        const [response] = await db.query(
+            "DELETE FROM Pokemon_Moves WHERE pokemon_moves_id = ?",
+            [pokmonMovesID]
+        );
+
+        console.log("Deleted", response.affectedRows, "rows from Pokemon_Moves intersection table");
+
+        //delete the move
+        await db.query("DELETE FROM Pokemon_Moves WHERE pokemon_moves_id = ?", [pokemonMovesID]);
+
+        res.status(204).json({message: "Move deleted successfully" });
+    } catch (error){
+        console.error("Error deleting move from database: ", error);
+        res.status(500).json({error: error.message});
+    }
+}
 
 module.exports = {
-    addMoveToMoveset
+    addMoveToMoveset,
+    updateMoveInMoveset,
+    deleteMove,
 };
