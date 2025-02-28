@@ -28,8 +28,7 @@ const addMoveToMoveset = async (req, res) => {
 // Read all entries of Moves-Pokemon
 const getPokemonMoves = async(req, res) => {
     try{
-        const pokemonMovesID = erq.params.id;
-        const query = "SELECT * FROM Pokemon_Moves";
+        const query = `SELECT * FROM Pokemon_Moves`;
         //executes the query
         const [rows] = await db.query(query)
         //send rows back
@@ -44,8 +43,8 @@ const getPokemonMoves = async(req, res) => {
 const getMovesByPokemonID = async (req, res) => {
     try{
         const pokemonMovesID = req.params.id;
-        const query = "SELECT * WHERE pokmone_moves_id = ?";
-        const [result] = await db.query(query, [pokmonMovesID]);
+        const query = `SELECT * FROM Pokemon_Moves WHERE pokemon_moves_id = '${pokemonMovesID}'`;
+        const [result] = await db.query(query);
 
         if (result.length == 0){
             return res.status(404).json({error: "Pokemon move not found" });
@@ -65,23 +64,21 @@ const updateMoveInMoveset = async (req, res) => {
     //gets pokemon_moves_id
     const pokemonMovesID = req.params.id;
     //gets Pokemon_Moves
-    const newMove = req.body;
+    const newMove = req.body
 
     try {
-        const [data] = await db.query("SELECT * FROM Pokemon_Moves WHERE pokemon_moves_id = ?", [
-            pokemonMovesID,
-        ]);
+        const [data] = await db.query(`SELECT * FROM Pokemon_Moves WHERE pokemon_moves_id = '${pokemonMovesID}'`);
 
         const oldMove = data[0];
 
         //if oldData and newData differ perform updates
         if(!lodash.isEqual(newMove, oldMove)){
-            const query = "UPDATE Pokemon_Moves SET pokemon_id = ?, move_id = ? WHERE pokemon_moves_id = ?";
+            const query = `UPDATE Pokemon_Moves SET pokemon_id = ${newMove.pokemon_id}, move_id = ${newMove.move_id} WHERE pokemon_moves_id = ${pokemonMovesID}`;
         
 
         const values = [
-            newMoveData.pokemon_id,
-            newMoveData.move_id,
+            newMove.pokemon_id,
+            newMove.move_id,
             pokemonMovesID,
 
         ];
@@ -108,28 +105,23 @@ const updateMoveInMoveset = async (req, res) => {
 // Delete an entry in Moves-Pokemon
 const deleteMove = async (req, res) => {
     console.log("Deleting Pokemon Move with ID: ", req.params.id);
-    const pokmonMovesID = req.params.id;
+    const pokemonMovesID = req.params.id;
 
     try{
         //checks if move exists
         const [isExisting] = await db.query(
-            "SELECT 1 FROM Pokemon_Moves WHERE pokemon_moves_id = ?", 
-            [pokemonMovesID]);
+            `SELECT 1 FROM Pokemon_Moves WHERE pokemon_moves_id = ${pokemonMovesID}`);
 
         //if the move doesn't exist, return an error.
         if(isExisting.length == 0) {
             return res.status(404).send("Move not found");
         }
 
+        //delete the move
         const [response] = await db.query(
-            "DELETE FROM Pokemon_Moves WHERE pokemon_moves_id = ?",
-            [pokmonMovesID]
-        );
+            `DELETE FROM Pokemon_Moves WHERE pokemon_moves_id = ${pokemonMovesID}`);
 
         console.log("Deleted", response.affectedRows, "rows from Pokemon_Moves intersection table");
-
-        //delete the move
-        await db.query("DELETE FROM Pokemon_Moves WHERE pokemon_moves_id = ?", [pokemonMovesID]);
 
         res.status(204).json({message: "Move deleted successfully" });
     } catch (error){

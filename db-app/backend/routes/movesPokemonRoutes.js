@@ -10,6 +10,10 @@ const {
 
 
 router.post("/create", addMoveToMoveset);
+router.delete("/:id", deleteMove);
+router.get("/get", getPokemonMoves);
+router.get("/:id", getMovesByPokemonID);
+router.put("/:id", updateMoveInMoveset);
 
 
 module.exports = router;
