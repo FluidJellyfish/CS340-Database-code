@@ -6,10 +6,10 @@ const {
   getMovesByPokemonID,
   updateMoveInMoveset,
   deleteMove,
-} = require("../controllers/movesPokemonController.js");
+} = require("../controllers/movesPokemonController");
 
 
-router.post("/pokemon/moves/create", addMoveToMoveset);
+router.post("/create", addMoveToMoveset);
 
 
 module.exports = router;

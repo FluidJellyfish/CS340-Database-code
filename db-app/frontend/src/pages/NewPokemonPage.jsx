@@ -1,23 +1,45 @@
+import { useState, useEffect } from 'react';  
+import axios from 'axios';
+
 import TypeInput from "../components/TypeInput";
 
 
 const POKEMONNAMES = [
-    "Pikachu",
-    "Charmander",
+    "Farfetch\'d",
     "Bulbasaur",
-    "Squirtle",
-    "Jigglypuff"
+    "Charmander"
 ];
 
 const MOVENAMES = [
-    "Thunderbolt",
-    "Flamethrower",
-    "Vine Whip",
-    "Water Gun",
-    "Sing"
+    "Rock Smash",
+    "Fireball",
+    "Vine Whip"
 ];
 
 function NewPokemonPage({pokemonNames=POKEMONNAMES, moveNames=MOVENAMES}) {
+    const [newMovePokemonName, setNewMovePokemonName] = useState(['']);
+    const [newMoveName, setNewMoveName] = useState(['']);
+
+    function addMoveToPokemon(formData) {
+        try { 
+            const URL = import.meta.env.VITE_API_URL + 'pokemon/moves/create';
+            const data = {
+                pokemonName: formData.get('newMovePokemonName'),
+                moveName: formData.get('newMoveName')
+            };
+            axios.post(URL, data);
+            alert('Move added to Pokemon\'s moveset successfully!');
+        } catch {
+            console.error('Error adding move to Pokemon\'s moveset: ', error);
+            alert('Error adding move to Pokemon\'s moveset');
+        }
+      
+    }
+    const handleAddMoveSubmit = (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        addMoveToPokemon(formData);
+    };
     return (
         <div>
             <h2>Add a New Pokemon</h2>
@@ -41,7 +63,7 @@ function NewPokemonPage({pokemonNames=POKEMONNAMES, moveNames=MOVENAMES}) {
             <button type="submit">Add Pokemon</button>
             </form>
             <h2>Add a Move to a Pokemon's Moveset</h2>
-            <form className="pokemon-moveset-edit">
+            <form onSubmit={handleAddMoveSubmit}>
             <table>
                 <thead>
                     <tr>

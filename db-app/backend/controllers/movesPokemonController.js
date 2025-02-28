@@ -10,22 +10,18 @@ const addMoveToMoveset = async (req, res) => {
     
     const { pokemonName, moveName } = req.body
     try {
-        const [rows] = await db.query(query);
         const query = `INSERT INTO Pokemon_Moves(pokemon_id, move_id) VALUES (
-            (SELECT Pokemon.pokemon_id FROM Pokemon WHERE Pokemon.pokemon_name = ?),
-            (SELECT Moves.move_id FROM Moves WHERE Moves.move_name = ?));`;
+            (SELECT Pokemon.pokemon_id FROM Pokemon WHERE Pokemon.pokemon_name = '${pokemonName}'),
+            (SELECT Moves.move_id FROM Moves WHERE Moves.move_name = '${moveName}'));`;
 
-        const response = await db.query(query, [
-            pokemonName,
-            moveName
-        ]);
+        const response = await db.query(query);
 
         res.status(201).json(response);
     } catch (error) {
         // Print error on dev side
-        console.error("Error creating person:", error);
+        console.error("Error adding Move to moveset: ", error);
         // Client side error render
-        res.status(500).json({ error: "Error creating person" });
+        res.status(500).json({ error: "Error adding Move to moveset" });
     }
 };
 

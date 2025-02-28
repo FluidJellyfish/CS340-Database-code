@@ -1,3 +1,6 @@
+import { useState, useEffect } from 'react'; 
+import axios from 'axios';
+
 import PokemonTable from '../components/pokemon/PokemonTable';
 import MovesPokemonTable from '../components/pokemon/MovesPokemonTable';
 
@@ -30,6 +33,12 @@ const MOVESPOKEMON = [
 ];
 
 function PokemonPage() {
+  //const [pokemonData, setPokemonData] = useState([]);
+  const [movesPokemonData, setMovesPokemonData] = useState([]);
+
+
+
+
   return (
     <div>
       <h2>Pokemon</h2>
