@@ -38,13 +38,12 @@ function PokemonPage() {
 
 
 
-
   return (
     <div>
       <h2>Pokemon</h2>
         <PokemonTable pokemons={POKEMON} />
         <h2>Movesets</h2>
-        <MovesPokemonTable movesPokemon={MOVESPOKEMON}/>
+        <MovesPokemonTable/>
     </div>
   );
 }

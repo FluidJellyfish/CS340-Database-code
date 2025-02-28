@@ -5,7 +5,7 @@ import TypeInput from "../components/TypeInput";
 
 
 const POKEMONNAMES = [
-    "Farfetch\'d",
+    "Farfetchd",
     "Bulbasaur",
     "Charmander"
 ];
@@ -40,6 +40,7 @@ function NewPokemonPage({pokemonNames=POKEMONNAMES, moveNames=MOVENAMES}) {
         const formData = new FormData(event.target);
         addMoveToPokemon(formData);
     };
+    
     return (
         <div>
             <h2>Add a New Pokemon</h2>

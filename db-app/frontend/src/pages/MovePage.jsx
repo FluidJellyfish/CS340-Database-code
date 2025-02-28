@@ -1,8 +1,8 @@
 import MoveTable from '../components/move/MoveTable';
 
 const MOVES = [
-    {id: 1, name: "Tackle", type: "Normal", damage: 40},
-    {id: 2, name: "Flamethrower", type: "Fire", damage: 90},
+    {id: 1, name: "Rock Smash", type: "Normal", damage: 40},
+    {id: 2, name: "Fireball", type: "Fire", damage: 90},
     {id: 3, name: "Water Gun", type: "Water", damage: 40},
     {id: 4, name: "Thunderbolt", type: "Electric", damage: 90},
     {id: 5, name: "Vine Whip", type: "Grass", damage: 45},

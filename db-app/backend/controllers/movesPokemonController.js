@@ -28,7 +28,10 @@ const addMoveToMoveset = async (req, res) => {
 // Read all entries of Moves-Pokemon
 const getPokemonMoves = async(req, res) => {
     try{
-        const query = `SELECT * FROM Pokemon_Moves`;
+        const query = `SELECT Pokemon_Moves.pokemon_moves_id, Pokemon_Moves.pokemon_id, Pokemon.pokemon_name, Pokemon_Moves.move_id, Moves.move_name FROM Pokemon_Moves
+        INNER JOIN Pokemon ON Pokemon_Moves.pokemon_id = Pokemon.pokemon_id
+        INNER JOIN Moves ON Pokemon_Moves.move_id = Moves.move_id
+        ORDER BY pokemon_id ASC;`;
         //executes the query
         const [rows] = await db.query(query)
         //send rows back
@@ -40,17 +43,19 @@ const getPokemonMoves = async(req, res) => {
 };
 
 // Read the moves of a Pokemon given by its ID
-const getMovesByPokemonID = async (req, res) => {
+const getMovesByPokemonName = async (req, res) => {
     try{
-        const pokemonMovesID = req.params.id;
-        const query = `SELECT * FROM Pokemon_Moves WHERE pokemon_moves_id = '${pokemonMovesID}'`;
+        const pokemonName = req.params.pokemonName;
+        const query = `SELECT Pokemon_Moves.pokemon_moves_id, Pokemon_Moves.pokemon_id, Pokemon.pokemon_name, Pokemon_Moves.move_id, Moves.move_name FROM Pokemon_Moves
+        INNER JOIN Pokemon ON Pokemon_Moves.pokemon_id = Pokemon.pokemon_id AND Pokemon.pokemon_name = '${pokemonName}'
+        INNER JOIN Moves ON Pokemon_Moves.move_id = Moves.move_id
+        ORDER BY pokemon_id ASC;`;
         const [result] = await db.query(query);
 
         if (result.length == 0){
             return res.status(404).json({error: "Pokemon move not found" });
         }
-        const move = result[0]
-        res.json(move);
+        res.json(result);
     } catch(error){
         console.error("Error fetching move from db: ", error);
         res.status(500).json({error: "Error fetching move"});
@@ -61,35 +66,28 @@ const getMovesByPokemonID = async (req, res) => {
 // Update a move assigned to a Pokemon given by its ID
 const updateMoveInMoveset = async (req, res) => {
 
-    //gets pokemon_moves_id
-    const pokemonMovesID = req.params.id;
-    //gets Pokemon_Moves
-    const newMove = req.body
+    const {pokemonMovesID, newMoveName} = req.body;
 
     try {
-        const [data] = await db.query(`SELECT * FROM Pokemon_Moves WHERE pokemon_moves_id = '${pokemonMovesID}'`);
+        const id_query = await db.query(`SELECT move_id FROM Moves WHERE move_name = '${newMoveName}'`);
+        const newMoveID = id_query[0][0].move_id;
+        console.log("New Move ID: ", newMoveID);
+        const [data] = await db.query(`SELECT Pokemon_Moves.move_id FROM Pokemon_Moves WHERE pokemon_moves_id = '${pokemonMovesID}'`);
 
-        const oldMove = data[0];
+        const oldMoveID = data[0].move_id;
 
+        console.log("Old Move ID: ", oldMoveID);
         //if oldData and newData differ perform updates
-        if(!lodash.isEqual(newMove, oldMove)){
-            const query = `UPDATE Pokemon_Moves SET pokemon_id = ${newMove.pokemon_id}, move_id = ${newMove.move_id} WHERE pokemon_moves_id = ${pokemonMovesID}`;
-        
+        if(!lodash.isEqual(newMoveID, oldMoveID)){
+            const query = `UPDATE Pokemon_Moves SET move_id = ${newMoveID} WHERE pokemon_moves_id = ${pokemonMovesID}`;
 
-        const values = [
-            newMove.pokemon_id,
-            newMove.move_id,
-            pokemonMovesID,
+            //update
+            await db.query(query);
 
-        ];
-
-        //update
-        await db.query(query, values);
-
-        return res.json({message: "Pokemon move has been updated." });
-    }
-
-        res.json({message: "Move details are the same, no update" });
+            return res.json({message: "Pokemon move has been updated." });
+        }else{
+            res.json({message: "Move details are the same, no update" });
+        }
         
     } catch (error){
         //server side
@@ -133,7 +131,7 @@ const deleteMove = async (req, res) => {
 module.exports = {
     addMoveToMoveset,
     getPokemonMoves,
-    getMovesByPokemonID,
+    getMovesByPokemonName,
     updateMoveInMoveset,
     deleteMove,
 };

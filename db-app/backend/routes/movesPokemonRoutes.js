@@ -3,17 +3,18 @@ const router = express.Router();
 const {
   addMoveToMoveset,
   getPokemonMoves,
-  getMovesByPokemonID,
+  getMovesByPokemonName,
   updateMoveInMoveset,
   deleteMove,
 } = require("../controllers/movesPokemonController");
 
 
 router.post("/create", addMoveToMoveset);
-router.delete("/:id", deleteMove);
+router.delete("/delete/:id", deleteMove);
 router.get("/get", getPokemonMoves);
-router.get("/:id", getMovesByPokemonID);
-router.put("/:id", updateMoveInMoveset);
+router.get("/:pokemonName", getMovesByPokemonName);
+router.put("/update/", updateMoveInMoveset);
+router.get("/", getPokemonMoves);
 
 
 module.exports = router;
