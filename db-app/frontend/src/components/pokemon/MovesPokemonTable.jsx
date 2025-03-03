@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
+import { Component } from "react";
 import axios from 'axios';
 
 const MOVENAMES = [
@@ -8,35 +9,36 @@ const MOVENAMES = [
     "Vine Whip"
 ]
 
-const handleDelete = (id, fetchMovesPokemonData) => {
+const handleDelete = async (id, fetchMovesPokemonData) => {
     try {
         const URL = import.meta.env.VITE_API_URL + 'pokemon/moves/delete/' + id;
-        axios.delete(URL);
+        await axios.delete(URL);
         alert('Move deleted from Pokemon\'s moveset successfully!');
         fetchMovesPokemonData();
-    } catch {
+    } catch (error) {
         console.error('Error deleting move from Pokemon\'s moveset: ', error);
         alert('Error deleting move from Pokemon\'s moveset');
     }
 };
 
-const handleUpdate = (id,moveName, fetchMovesPokemonData) => {
-    try {
-        const URL = import.meta.env.VITE_API_URL + 'pokemon/moves/update/';
-        const data = {
-            pokemonMovesID: id,
-            newMoveName: moveName
-        };
-        axios.put(URL, data);
-        fetchMovesPokemonData();
-        alert('Move updated in Pokemon\'s moveset successfully!');
-    } catch {
-        console.error('Error updating move from Pokemon\'s moveset: ', error);
-        alert('Error updating move from Pokemon\'s moveset');
-    }
-};
-
 function MovesPokemonRow({movePokemon, fetchMovesPokemonData}){
+    async function handleUpdate(formData) {
+        try {
+            const moveName = formData.get('moveName');
+            const URL = import.meta.env.VITE_API_URL + 'pokemon/moves/update/';
+            const data = {
+                pokemonMovesID: movePokemon.pokemon_moves_id,
+                newMoveName: moveName
+            };
+            await axios.put(URL, data);
+            fetchMovesPokemonData();
+            alert('Move updated in Pokemon\'s moveset successfully!');
+        } catch (error) {
+            console.error('Error updating move from Pokemon\'s moveset: ', error);
+            alert('Error updating move from Pokemon\'s moveset');
+        }
+    };
+
     const move_names = MOVENAMES.filter(name => name != movePokemon.move_name);
     return (
         <tr>
@@ -46,15 +48,22 @@ function MovesPokemonRow({movePokemon, fetchMovesPokemonData}){
             <td>{movePokemon.move_id}</td>
             <td>{movePokemon.move_name}</td>
             <td>
-                <select>
+            <form form onSubmit={(e) => { 
+                e.preventDefault(); 
+                const formData = new FormData(e.target);
+                handleUpdate(formData);
+            }}>
+                <select name="moveName">
                     {move_names.map(name => (
                         <option key={name} value={name}>{name}</option>
                     ))}
                 </select>
+                <button type="submit">Update</button>
+            </form>
             </td>
-            <td><button onClick={() => handleUpdate(movePokemon.pokemon_moves_id, movePokemon.move_name, fetchMovesPokemonData)}>Update</button></td>
-            <td><button onClick={() => handleDelete(movePokemon.pokemon_moves_id, fetchMovesPokemonData)}>Delete</button></td>
+            <td><button type="button" onClick={() => handleDelete(movePokemon.pokemon_moves_id, fetchMovesPokemonData)}>Delete</button></td>
         </tr>
+        
     );
 }
 

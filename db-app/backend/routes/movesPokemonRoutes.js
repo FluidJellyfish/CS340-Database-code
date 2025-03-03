@@ -13,7 +13,7 @@ router.post("/create", addMoveToMoveset);
 router.delete("/delete/:id", deleteMove);
 router.get("/get", getPokemonMoves);
 router.get("/:pokemonName", getMovesByPokemonName);
-router.put("/update/", updateMoveInMoveset);
+router.put("/update", updateMoveInMoveset);
 router.get("/", getPokemonMoves);
 
 
