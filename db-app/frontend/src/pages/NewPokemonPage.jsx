@@ -4,11 +4,6 @@ import axios from 'axios';
 import TypeInput from "../components/TypeInput";
 
 
-const POKEMONNAMES = [
-    "Farfetchd",
-    "Bulbasaur",
-    "Charmander"
-];
 
 const MOVENAMES = [
     "Rock Smash",
@@ -16,9 +11,40 @@ const MOVENAMES = [
     "Vine Whip"
 ];
 
-function NewPokemonPage({pokemonNames=POKEMONNAMES, moveNames=MOVENAMES}) {
-    const [newMovePokemonName, setNewMovePokemonName] = useState(['']);
-    const [newMoveName, setNewMoveName] = useState(['']);
+function NewPokemonPage({moveNames=MOVENAMES}) {
+    // State repeated. Really should be passed down by common parent shared with PokemonPage,
+    // but this is fine too
+    const [pokemonNames, setPokemonNames] = useState([]);
+
+    const fetchPokemonData = async () => {
+        try {
+            const response = await axios.get(import.meta.env.VITE_API_URL + 'pokemon/');
+            setPokemonNames(response.data);
+            alert(jsonify(response.data));
+        } catch (error) {
+            console.error('Error fetching pokemon data:', error);
+        };
+      };
+    
+      useEffect(() => {
+        fetchPokemonData();
+      }, []);
+
+    function addPokemon(formData) {
+        try { 
+            const URL = import.meta.env.VITE_API_URL + 'pokemon/create';
+            const data = {
+                pokemonName: formData.get('newPokemonName'),
+                pokemonType: formData.get('newPokemonType'),
+                pokemonHealth: formData.get('newPokemonHealth')
+            };
+            axios.post(URL, data);
+            alert(`Pokemon ${data.name} added successfully!`);
+        } catch {
+            console.error('Error adding Pokemon: ', error);
+            alert('Error adding Pokemon');
+        }
+    };
 
     function addMoveToPokemon(formData) {
         try { 
@@ -35,16 +61,25 @@ function NewPokemonPage({pokemonNames=POKEMONNAMES, moveNames=MOVENAMES}) {
         }
       
     }
+
+    const handleAddPokemonSubmit = (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        addPokemon(formData);   
+    };
+
     const handleAddMoveSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         addMoveToPokemon(formData);
     };
+
+
     
     return (
         <div>
             <h2>Add a New Pokemon</h2>
-            <form className="pokemon-input">
+            <form className="pokemon-input" onSubmit={handleAddPokemonSubmit}>
             <table>
                 <thead>
                     <tr>
@@ -77,7 +112,7 @@ function NewPokemonPage({pokemonNames=POKEMONNAMES, moveNames=MOVENAMES}) {
                         <td>
                         <select name="newMovePokemonName">
                             {pokemonNames.map((name, index) => (
-                                <option key={index} value={name}>{name}</option>
+                                <option key={index} value={name.pokemon_name}>{name.pokemon_name}</option>
                             ))}
                         </select>
                         </td>

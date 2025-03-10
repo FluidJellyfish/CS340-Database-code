@@ -15,33 +15,27 @@ const MOVES = [
   {id: 6, name: "Earthquake", type: "Ground", damage: 100}
 ];
 
-const POKEMON = [
-    {id: 1, name: "Bulbasaur", type: "Grass", health: 45},
-    {id: 2, name: "Charmander", type: "Fire", health: 39},
-    {id: 3, name: "Squirtle", type: "Water", health: 44},
-    {id: 4, name: "Pikachu", type: "Electric", health: 35},
-    {id: 5, name: "Jigglypuff", type: "Fairy", health: 115},
-    {id: 6, name: "Meowth", type: "Normal", health: 40}
-];
-
-const MOVESPOKEMON = [
-    {pokemon_id: 1, pokemon_name: "Bulbasaur", move_id: 1, move_name: "Tackle"},
-    {pokemon_id: 1, pokemon_name: "Bulbasaur", move_id: 5, move_name: "Vine Whip"},
-    {pokemon_id: 2, pokemon_name: "Charmander", move_id: 2, move_name: "Flamethrower"},
-    {pokemon_id: 2, pokemon_name: "Charmander", move_id: 4, move_name: "Thunderbolt"},
-    {pokemon_id: 3, pokemon_name: "Squirtle", move_id: 3, move_name: "Water Gun"}
-];
-
 function PokemonPage() {
-  //const [pokemonData, setPokemonData] = useState([]);
-  const [movesPokemonData, setMovesPokemonData] = useState([]);
+  const [pokemonData, setPokemonData] = useState([]);
 
+  const fetchPokemonData = async () => {
+    try {
+        const response = await axios.get(import.meta.env.VITE_API_URL + 'pokemon/');
+        setPokemonData(response.data);
+        alert(jsonify(response.data));
+    } catch (error) {
+        console.error('Error fetching pokemon data:', error);
+    };
+  };
 
+  useEffect(() => {
+    fetchPokemonData();
+  }, []);
 
   return (
     <div>
       <h2>Pokemon</h2>
-        <PokemonTable pokemons={POKEMON} />
+        <PokemonTable pokemons={pokemonData} />
         <h2>Movesets</h2>
         <MovesPokemonTable/>
     </div>

@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 function PokemonRow({ pokemon }) {
     return (
         <tr>
-        <td>{pokemon.id}</td>
-        <td>{pokemon.name}</td>
-        <td>{pokemon.type}</td>
+        <td>{pokemon.pokemon_id}</td>
+        <td>{pokemon.pokemon_name}</td>
+        <td>{pokemon.pokemon_type}</td>
         <td>{pokemon.health}</td>
         </tr>
     );
