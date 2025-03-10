@@ -1,30 +1,60 @@
 import TrainerTable from "../components/trainer/TrainerTable";
 import PokemonTrainerTable from "../components/trainer/PokemonTrainerTable";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 // Sample data
 
-const TRAINERS = [
-    {id: 1, items_held: "egg", battle_record: 1},
-    {id: 2, items_held: "potion", battle_record: 3},
-    {id: 3, items_held: "revive", battle_record: 5}
-];
-
-const POKEMONTRAINERS = [
-    {trainer_id: 1, pokemon_id: 1, pokemon_name: "Bulbasaur"},
-    {trainer_id: 1, pokemon_id: 2, pokemon_name: "Charmander"},
-    {trainer_id: 1, pokemon_id: 3, pokemon_name: "Squirtle"},
-    {trainer_id: 2, pokemon_id: 4, pokemon_name: "Pikachu"},
-    {trainer_id: 2, pokemon_id: 5, pokemon_name: "Jigglypuff"},
-    {trainer_id: 3, pokemon_id: 6, pokemon_name: "Meowth"},
-    {trainer_id: 3, pokemon_id: 5, pokemon_name: "Jigglypuff"}
-];
-
 function TrainerPage() {
+    
+    const [trainerData, setTrainerdata] = useState([]);
+    const [pokemonTrainerdata, setPokemonTrainerData] = useState([]);
+    //'http://flip1.engr.oregonstate.edu:58675/api/pokemon/trainers'
+    
+    const fetchTrainerData = async() => {
+        console.log("Fetching trainer data");
+        try {
+            const url = import.meta.env.VITE_API_URL + 'pokemon/trainers'
+            console.log("Fetching data from:", url);
+            const response = await axios.get(url);
+            setTrainerdata(response.data);
+            console.log("response data:", response.data);
+            //alert(JSON.stringify(response.data));
+
+        } catch (error) {
+            console.error('Error fetching trainer data:', error);
+            if(error.response){
+                console.error('Error response:', error.response);
+            } else if(error.request){
+                console.error('Error request:', error.request);
+            }
+            else{
+                console.error('Error Message:', error.message);
+            }
+        };
+    };
+
+    //gets pokemonTrainerData
+    const fetchPokemonTrainerdata = async() => {
+        try{
+            const response = await axios.get(import.meta.env.VITE_API_URL + 'pokemonTrainers/');
+            setPokemonTrainerData(response.data);
+        } catch(error){
+            console.error('Error fetching pokemonTrainer data: ', error);
+        }
+    }
+
+    useEffect(() => {
+        fetchTrainerData();
+        fetchPokemonTrainerdata();
+    }, []);
+
+
     return (
         <div>
         <h1>Trainer Page</h1>
-            <TrainerTable trainers={TRAINERS} />
-            <PokemonTrainerTable pokemonTrainers={POKEMONTRAINERS}/>
+            <TrainerTable trainers={trainerData} />
+            <PokemonTrainerTable pokemonTrainers={pokemonTrainerdata}/>
         </div>
     );
 }

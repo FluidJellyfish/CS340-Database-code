@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function TrainerRow({ trainer }) {
     return (
         <tr>
-        <td>{trainer.id}</td>
+        <td>{trainer.trainer_id}</td>
         <td>{trainer.items_held}</td>
         <td><UpdateItemHeldField /></td>
         <td>{trainer.battle_record}</td>
@@ -47,7 +47,7 @@ export default function TrainerTable({ trainers }) {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Item Held</th>
+                        <th>Items Held</th>
                         <th></th>
                         <th>Battle Record</th>
                         <th></th>
@@ -55,7 +55,7 @@ export default function TrainerTable({ trainers }) {
                 </thead>
                 <tbody>
                     {trainers.map(trainer => (
-                        <TrainerRow key={trainer.id} trainer={trainer} />
+                        <TrainerRow key={trainer.trainer_id} trainer={trainer} />
                     ))}
                 </tbody>
             </table>
