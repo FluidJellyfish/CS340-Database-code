@@ -21,7 +21,7 @@ const handleDelete = async (id, fetchMovesPokemonData) => {
     }
 };
 
-function MovesPokemonRow({movePokemon, fetchMovesPokemonData}){
+function MovesPokemonRow({movePokemon, fetchMovesPokemonData, moveNames}){
     async function handleUpdate(formData) {
         try {
             const moveName = formData.get('moveName');
@@ -39,7 +39,7 @@ function MovesPokemonRow({movePokemon, fetchMovesPokemonData}){
         }
     };
 
-    const move_names = MOVENAMES.filter(name => name != movePokemon.move_name);
+    const move_names = moveNames.filter(name => name.move_name != movePokemon.move_name);
     return (
         <tr>
             <td>{movePokemon.pokemon_moves_id}</td>
@@ -55,7 +55,7 @@ function MovesPokemonRow({movePokemon, fetchMovesPokemonData}){
             }}>
                 <select name="moveName">
                     {move_names.map(name => (
-                        <option key={name} value={name}>{name}</option>
+                        <option key={name} value={name.move_name}>{name.move_name}</option>
                     ))}
                 </select>
                 <button type="submit">Update</button>
@@ -92,7 +92,7 @@ function PokemonFilterField({ pokemonNames, selectedPokemon, setSelectedPokemon 
     );
 }
 
-export default function MovesPokemonTable({}) {
+export default function MovesPokemonTable({moveNames}) {
     const [selectedPokemon, setSelectedPokemon] = useState('');
     const [movesPokemon, setMovesPokemon] = useState([]);
     const [pokemonNames, setPokemonNames] = useState([]);
@@ -148,7 +148,7 @@ export default function MovesPokemonTable({}) {
                 </thead>
                 <tbody>
                     {movesPokemon.map(movePokemon => (
-                        <MovesPokemonRow key={movePokemon.move_pokemon_id} movePokemon={movePokemon} fetchMovesPokemonData={fetchMovesPokemonData}/>
+                        <MovesPokemonRow key={movePokemon.move_pokemon_id} movePokemon={movePokemon} fetchMovesPokemonData={fetchMovesPokemonData} moveNames={moveNames}/>
                     ))}
                 </tbody>
             </table>

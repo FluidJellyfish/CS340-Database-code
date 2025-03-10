@@ -1,21 +1,30 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
 import MoveTable from '../components/move/MoveTable';
 
-const MOVES = [
-    {id: 1, name: "Rock Smash", type: "Normal", damage: 40},
-    {id: 2, name: "Fireball", type: "Fire", damage: 90},
-    {id: 3, name: "Water Gun", type: "Water", damage: 40},
-    {id: 4, name: "Thunderbolt", type: "Electric", damage: 90},
-    {id: 5, name: "Vine Whip", type: "Grass", damage: 45},
-    {id: 6, name: "Earthquake", type: "Ground", damage: 100}
-];
-
 function MovePage() {
-  return (
-    <div>
-      <h1>Move Page</h1>
-        <MoveTable moves={MOVES} />
-    </div>
-  );
+    const [moveData, setMoveData] = useState([]);
+    const fetchMoveData = async () => {
+        try {
+            const response = await axios.get(import.meta.env.VITE_API_URL + 'moves/');
+            setMoveData(response.data);
+            alert(jsonify(response.data));
+        } catch (error) {
+            console.error('Error fetching move data:', error);
+        };
+    };
+    
+    useEffect(() => {
+        fetchMoveData();
+    }, []);
+
+    return (
+        <div>
+          <h1>Move Page</h1>
+          <MoveTable moves={moveData} />
+        </div>
+    );
 }
 
 export default MovePage;

@@ -1,0 +1,37 @@
+// Adapted from React Starter Guide https://github.com/osu-cs340-ecampus/react-starter-app
+
+const db = require("../database/config");
+require("dotenv").config();
+const lodash = require("lodash");
+
+const getPokemon = async (req, res) => {
+    try{
+        const query = `SELECT Pokemon.pokemon_id, Pokemon.pokemon_name, Pokemon.pokemon_type, Pokemon.health FROM Pokemon
+        ORDER BY pokemon_id ASC;`;
+        const [rows] = await db.query(query)
+        res.status(200).json(rows);
+    } catch(error) {
+        console.error("Error fetching Pokemon from the db: ", error);
+        res.status(500).json({error: "Error fetching Pokemon"});
+    }
+};
+
+const addPokemon = async (req, res) => {
+    
+    const { pokemonName, pokemonType, pokemonHealth } = req.body;
+    try {
+        const query = `INSERT INTO Pokemon (Pokemon.pokemon_name, Pokemon.pokemon_type, Pokemon.health) VALUES ('${pokemonName}', '${pokemonType}', '${pokemonHealth}');`;
+        const response = await db.query(query);
+        res.status(201).json(response);
+    } catch (error) {
+        // Print error on dev side
+        console.error("Error adding Pokemon", error);
+        // Client side error render
+        res.status(500).json({ error: "Error adding Pokemon" });
+    }
+};
+
+module.exports = {
+    getPokemon,
+    addPokemon
+};
