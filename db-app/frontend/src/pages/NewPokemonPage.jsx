@@ -11,24 +11,38 @@ const MOVENAMES = [
     "Vine Whip"
 ];
 
-function NewPokemonPage({moveNames=MOVENAMES}) {
-    // State repeated. Really should be passed down by common parent shared with PokemonPage,
-    // but this is fine too
+function NewPokemonPage() {
+    // State repeated. Really should be passed down by common parent shared with PokemonPage/MovePage, instead I just query the db again on load
     const [pokemonNames, setPokemonNames] = useState([]);
+    const [moveNames, setMoveNames] = useState([]);
 
     const fetchPokemonData = async () => {
         try {
             const response = await axios.get(import.meta.env.VITE_API_URL + 'pokemon/');
             setPokemonNames(response.data);
-            alert(jsonify(response.data));
+            //alert(jsonify(response.data));
         } catch (error) {
             console.error('Error fetching pokemon data:', error);
         };
       };
     
-      useEffect(() => {
+    useEffect(() => {
         fetchPokemonData();
-      }, []);
+    }, []);
+
+    const fetchMoveData = async () => {
+        try {
+            const response = await axios.get(import.meta.env.VITE_API_URL + 'moves/');
+            setMoveNames(response.data);
+            //alert(jsonify(response.data));
+        } catch (error) {
+            console.error('Error fetching move data:', error);
+        };
+    };  
+    
+    useEffect(() => {
+        fetchMoveData();
+    }, []);
 
     function addPokemon(formData) {
         try { 
@@ -119,7 +133,7 @@ function NewPokemonPage({moveNames=MOVENAMES}) {
                         <td>
                         <select name="newMoveName">
                             {moveNames.map((name, index) => (
-                                <option key={index} value={name}>{name}</option>
+                                <option key={index} value={name.move_name}>{name.move_name}</option>
                             ))}
                         </select>
                         </td>

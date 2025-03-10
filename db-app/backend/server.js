@@ -18,7 +18,9 @@ app.use(express.json());
 // API Routes for backend CRUD:
 //app.use("/api/people", require("./routes/peopleRoutes"));
 
+app.use("/api/pokemon", require("./routes/pokemonRoutes.js"));
 app.use("/api/pokemon/moves", require("./routes/movesPokemonRoutes"));
+app.use("/api/moves", require("./routes/movesRoutes"));
 
 // Add your Connect DB Activitiy Code Below:
 const db = require('./database/config.js');

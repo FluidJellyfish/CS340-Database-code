@@ -1,0 +1,11 @@
+const express = require("express");
+const router = express.Router();
+const {
+    getMoves,
+    addMove
+} = require("../controllers/movesController");
+
+router.get("/", getMoves);
+router.post("/create", addMove);
+
+module.exports = router;

@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 function MoveRow({ move }) {
     return (
         <tr>
-        <td>{move.id}</td>
-        <td>{move.name}</td>
-        <td>{move.type}</td>
-        <td>{move.damage}</td>
+        <td>{move.move_id}</td>
+        <td>{move.move_name}</td>
+        <td>{move.move_type}</td>
+        <td>{move.move_dmg}</td>
         </tr>
     );
 }
@@ -35,7 +35,7 @@ export default function MoveTable({ moves }) {
                 </thead>
                 <tbody>
                     {moves.map(move => (
-                        <MoveRow key={move.id} move={move} />
+                        <MoveRow key={move.move_id} move={move} />
                     ))}
                 </tbody>
             </table>
