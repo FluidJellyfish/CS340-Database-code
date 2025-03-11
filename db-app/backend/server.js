@@ -24,6 +24,7 @@ app.use("/api/pokemon/trainers", require("./routes/trainerRoutes"));
 app.use("/api/moves", require("./routes/movesRoutes"));
 app.use("/api/battles", require("./routes/battleRoutes"));
 app.use("/api/trainers/pokemon", require("./routes/pokemonTrainerRoutes"));
+app.use("/api/gyms", require("./routes/gymRoutes"));
 
 // Add your Connect DB Activitiy Code Below:
 const db = require('./database/config.js');

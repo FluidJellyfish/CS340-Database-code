@@ -1,7 +1,7 @@
 function GymRow({ gym }) {
     return (
         <tr>
-        <td>{gym.id}</td>
+        <td>{gym.gym_id}</td>
         <td>{gym.gym_leader_id}</td>
         </tr>
     );
@@ -43,7 +43,7 @@ export default function GymTable({ gyms }) {
                 </thead>
                 <tbody>
                     {gyms.map(gym => (
-                        <GymRow key={gym.id} gym={gym} />
+                        <GymRow key={gym.gym_id} gym={gym} />
                     ))}
                 </tbody>
             </table>
