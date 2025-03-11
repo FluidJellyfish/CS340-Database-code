@@ -1,27 +1,17 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-const POKEMONNAMES = [
-    "Rock Smash",
-    "Fireball",
-    "Vine Whip"
-];
-
-//const TRAINERIDS = [
-//    "1",
-//    "2",
-//    "3"
-//];
 
 
-function NewTrainerPage({pokemonNames=POKEMONNAMES}) {
+function NewTrainerPage() {
 
     const [trainerIds, setTrainerIds] = useState([]);
+    const [pokemonNames, setPokemonNames] = useState([]);
 
 
     const fetchTrainerData = async() => {
         try {
-            const response = await axios.get(import.meta.env.VITE_API_URL + 'pokemon/trainers');
+            const response = await axios.get(import.meta.env.VITE_API_URL + 'pokemon/trainers/');
             setTrainerIds(response.data);
             //alert(jsonify(response.data));
 
@@ -30,8 +20,19 @@ function NewTrainerPage({pokemonNames=POKEMONNAMES}) {
         };
     };
 
+    const fetchPokemonData = async () => {
+        try {
+            const response = await axios.get(import.meta.env.VITE_API_URL + 'pokemon/');
+            setPokemonNames(response.data);
+            //alert(jsonify(response.data));
+        } catch (error) {
+            console.error('Error fetching pokemon data:', error);
+        };
+    };  
+
     useEffect(() => {
         fetchTrainerData();
+        fetchPokemonData();
     }, []);
 
     function addTrainer(formData){
@@ -53,11 +54,33 @@ function NewTrainerPage({pokemonNames=POKEMONNAMES}) {
     };
 
 
+    function addPokemonToTrainer(formData) {
+        try {
+            const URL = import.meta.env.VITE_API_URL + 'trainers/pokemon/create';
+            const data = {
+                pokemonName: formData.get('newPokemonName'),
+                trainerID: formData.get('newPokemonTrainerID')
+            };
+            axios.post(URL, data);
+            alert('Pokemon added to Trainer\'s team successfully!');
+        } catch {
+            console.error('Error adding Pokemon to Trainer\'s team: ', error);
+            alert('Error adding Pokemon to Trainer\'s team');
+        }
+    };
+
+
     const handleAddTrainerSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         addTrainer(formData);
-    }
+    };
+
+    const handleAddPokemonToTrainerSubmit = (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        addPokemonToTrainer(formData);
+    };
 
 
     return (
@@ -81,11 +104,11 @@ function NewTrainerPage({pokemonNames=POKEMONNAMES}) {
             <button type="submit">Add Trainer</button>
             </form>
             <h2>Add a Pokemon to a Trainer's Team</h2>
-            <form className="trainer-team-edit">
+            <form className="trainer-team-edit" onSubmit={handleAddPokemonToTrainerSubmit}>
             <table>
                 <thead>
                     <tr>
-                        <th>Pokemon ID</th>
+                        <th>Pokemon</th>
                         <th>Trainer ID</th>
                     </tr>
                 </thead>
@@ -94,14 +117,14 @@ function NewTrainerPage({pokemonNames=POKEMONNAMES}) {
                     <td>
                     <select name="newPokemonName">
                         {pokemonNames.map((name, index) => (
-                            <option key={index} value={name}>{name}</option>
+                            <option key={index} value={name.pokemon_name}>{name.pokemon_name}</option>
                         ))}
                     </select>
                     </td>
                     <td>
                     <select name="newPokemonTrainerID">
                         {trainerIds.map((trainerIds) => (
-                            <option key={trainerIds.trainer_id} value={trainerIds.trainer_id}></option>
+                            <option key={trainerIds.trainer_id} value={trainerIds.trainer_id}>{trainerIds.trainer_id}</option>
                         ))}
                     </select>
                     </td>

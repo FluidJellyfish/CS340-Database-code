@@ -4,13 +4,6 @@ import axios from 'axios';
 import TypeInput from "../components/TypeInput";
 
 
-
-const MOVENAMES = [
-    "Rock Smash",
-    "Fireball",
-    "Vine Whip"
-];
-
 function NewPokemonPage() {
     // State repeated. Really should be passed down by common parent shared with PokemonPage/MovePage, instead I just query the db again on load
     const [pokemonNames, setPokemonNames] = useState([]);
@@ -28,6 +21,7 @@ function NewPokemonPage() {
     
     useEffect(() => {
         fetchPokemonData();
+        fetchMoveData();
     }, []);
 
     const fetchMoveData = async () => {
@@ -39,10 +33,6 @@ function NewPokemonPage() {
             console.error('Error fetching move data:', error);
         };
     };  
-    
-    useEffect(() => {
-        fetchMoveData();
-    }, []);
 
     function addPokemon(formData) {
         try { 

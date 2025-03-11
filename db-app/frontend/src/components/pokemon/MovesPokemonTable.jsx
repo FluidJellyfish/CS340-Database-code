@@ -3,12 +3,6 @@ import { useState, useEffect } from 'react';
 import { Component } from "react";
 import axios from 'axios';
 
-const MOVENAMES = [
-    "Rock Smash",
-    "Fireball",
-    "Vine Whip"
-]
-
 const handleDelete = async (id, fetchMovesPokemonData) => {
     try {
         const URL = import.meta.env.VITE_API_URL + 'pokemon/moves/delete/' + id;
@@ -129,8 +123,6 @@ export default function MovesPokemonTable({moveNames}) {
         };
         fetchFilteredMoves();
     }, [selectedPokemon]);
-
-    // Extract unique pokemon names
 
     return (
         <div>

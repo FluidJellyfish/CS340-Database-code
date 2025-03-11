@@ -14,7 +14,7 @@ function TrainerPage() {
     const fetchTrainerData = async() => {
         console.log("Fetching trainer data");
         try {
-            const url = import.meta.env.VITE_API_URL + 'pokemon/trainers'
+            const url = import.meta.env.VITE_API_URL + 'pokemon/trainers/'
             console.log("Fetching data from:", url);
             const response = await axios.get(url);
             setTrainerdata(response.data);
@@ -37,7 +37,7 @@ function TrainerPage() {
     //gets pokemonTrainerData
     const fetchPokemonTrainerdata = async() => {
         try{
-            const response = await axios.get(import.meta.env.VITE_API_URL + 'pokemonTrainers/');
+            const response = await axios.get(import.meta.env.VITE_API_URL + 'trainers/pokemon/');
             setPokemonTrainerData(response.data);
         } catch(error){
             console.error('Error fetching pokemonTrainer data: ', error);
@@ -54,7 +54,7 @@ function TrainerPage() {
         <div>
         <h1>Trainer Page</h1>
             <TrainerTable trainers={trainerData} />
-            <PokemonTrainerTable pokemonTrainers={pokemonTrainerdata}/>
+            <PokemonTrainerTable />
         </div>
     );
 }
