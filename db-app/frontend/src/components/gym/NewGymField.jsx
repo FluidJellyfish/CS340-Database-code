@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function NewGymField() {
-    const [trainer_ids, setTrainerIds] = useState([]);
+    const [trainer_ids, setTrainerIds] = useState(['NULL']);
 
     const fetchTrainerData = async () => {
         try {
             const response = await axios.get(import.meta.env.VITE_API_URL + 'pokemon/trainers/');
-            setTrainerIds(response.data);
+            setTrainerIds([{trainer_id:'NULL'}, ...response.data]);
         } catch (error) {
             console.error('Error fetching trainer data:', error);
         };

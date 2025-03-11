@@ -53,7 +53,7 @@ function TrainerPage() {
     return (
         <div>
         <h1>Trainer Page</h1>
-            <TrainerTable trainers={trainerData} />
+            <TrainerTable trainers={trainerData} fetchTrainerData={fetchTrainerData} />
             <PokemonTrainerTable />
         </div>
     );

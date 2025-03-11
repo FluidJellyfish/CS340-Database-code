@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
-function TrainerRow({ trainer }) {
+function TrainerRow({ trainer, fetchTrainerData }) {
     return (
         <tr>
         <td>{trainer.trainer_id}</td>
         <td>{trainer.items_held}</td>
-        <td><UpdateItemHeldField /></td>
+        <td><UpdateItemHeldField id={trainer.trainer_id} fetchTrainerData={fetchTrainerData} /></td>
         <td>{trainer.battle_record}</td>
-        <td><UpdateBattleRecordField /></td>
+        <td><UpdateBattleRecordField id={trainer.trainer_id} fetchTrainerData={fetchTrainerData} /></td>
         </tr>
     );
 }
@@ -20,25 +21,67 @@ function NewTrainerButton() {
     );
 }
 
-function UpdateBattleRecordField() {
+function UpdateBattleRecordField({ id, fetchTrainerData }) {
+    async function handleUpdate(formData) {
+        try {
+            const newBattleRecord = formData.get('newBattleRecord');
+            const URL = import.meta.env.VITE_API_URL + 'pokemon/trainers/update/battleRecord';
+            const data = {
+                trainerId: id,
+                newBattleRecord: newBattleRecord
+            };
+            await axios.put(URL, data);
+            alert('Battle Record updated successfully!');
+        } catch (error) {
+            console.error('Error updating Battle Record: ', error);
+            alert('Error updating Battle Record');
+        }
+    };
+
     return (
-        <form>
-            <input type="number" placeholder="New Battle Record" />
+        <form onSubmit={(e) => { 
+            e.preventDefault(); 
+            const formData = new FormData(e.target);
+            handleUpdate(formData);
+            fetchTrainerData();
+        }}>
+            <input name="newBattleRecord" type="number" placeholder="New Battle Record" />
             <button type="submit">Update</button>
         </form>
     );
 }
 
-function UpdateItemHeldField() {
+function UpdateItemHeldField({ id, fetchTrainerData }) {
+    async function handleUpdate(formData) {
+        try {
+            const newItemHeld = formData.get('newItemHeld');
+            const URL = import.meta.env.VITE_API_URL + 'pokemon/trainers/update/itemsHeld';
+            const data = {
+                trainerId: id,
+                newItemHeld: newItemHeld
+            };
+            await axios.put(URL, data);
+            alert('Items Held updated successfully!');
+        } catch (error) {
+            console.error('Error updating Items Held: ', error);
+            alert('Error updating Items Held');
+        }
+    };
+
     return (
-        <form>
-            <input type="text" placeholder="New Item Held" />
+        <form onSubmit={(e) => { 
+            e.preventDefault(); 
+            const formData = new FormData(e.target);
+            handleUpdate(formData);
+            fetchTrainerData();
+        }}>
+            <input name="newItemHeld" type="text" placeholder="New Item Held" />
             <button type="submit">Update</button>
         </form>
     );
 }
 
-export default function TrainerTable({ trainers }) {
+export default function TrainerTable({ trainers, fetchTrainerData }) {
 
     return (
         <div>
@@ -55,7 +98,7 @@ export default function TrainerTable({ trainers }) {
                 </thead>
                 <tbody>
                     {trainers.map(trainer => (
-                        <TrainerRow key={trainer.trainer_id} trainer={trainer} />
+                        <TrainerRow key={trainer.trainer_id} trainer={trainer} fetchTrainerData={fetchTrainerData} />
                     ))}
                 </tbody>
             </table>

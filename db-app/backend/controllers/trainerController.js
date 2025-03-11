@@ -32,7 +32,43 @@ const getTrainers = async(req, res) => {
     }
 };
 
+const updateHeldItem = async (req, res) => {
+
+    const {trainerId, newItemHeld} = req.body;
+
+    try {
+        const id_query = await db.query(`UPDATE Trainers SET items_held = '${newItemHeld}' WHERE trainer_id = ${trainerId}`);
+        
+    } catch (error){
+        //server side
+        console.error("Error updating move set: ", error);
+
+        //client side error
+        res.status(500).json({error: "Error updating moveset."})
+    }
+
+
+};
+
+const updateBattleRecord = async (req, res) => {
+
+    const {trainerId, newBattleRecord} = req.body;
+
+    try {
+        await db.query(`UPDATE Trainers SET battle_record = '${newBattleRecord}' WHERE trainer_id = ${trainerId}`);
+        
+    } catch (error){
+        //server side
+        console.error("Error updating move set: ", error);
+
+        //client side error
+        res.status(500).json({error: "Error updating moveset."})
+    }
+};
+
 module.exports = {
     createTrainer,
-    getTrainers
+    getTrainers,
+    updateHeldItem,
+    updateBattleRecord
 };

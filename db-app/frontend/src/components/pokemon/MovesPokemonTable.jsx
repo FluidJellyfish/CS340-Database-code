@@ -33,6 +33,8 @@ function MovesPokemonRow({movePokemon, fetchMovesPokemonData, moveNames}){
         }
     };
 
+    
+
     const move_names = moveNames.filter(name => name.move_name != movePokemon.move_name);
     return (
         <tr>

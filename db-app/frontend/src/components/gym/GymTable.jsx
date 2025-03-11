@@ -1,7 +1,10 @@
 function GymRow({ gym }) {
+    if(gym.gym_leader_id === null) {
+        gym.gym_leader_id = 'NULL';
+    }
     return (
         <tr>
-        <td>{gym.gym_id}</td>
+        <td>{gym.gym_id}</td>  
         <td>{gym.gym_leader_id}</td>
         </tr>
     );

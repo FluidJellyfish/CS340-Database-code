@@ -28,7 +28,7 @@ const getPokemonTrainers = async(req, res) => {
     try{
         const query = ` SELECT Pokemon_Trainers.pokemon_trainer_id, Pokemon_Trainers.trainer_id, Pokemon_Trainers.pokemon_id, Pokemon.pokemon_name FROM Pokemon_Trainers
                         INNER JOIN Pokemon ON Pokemon_Trainers.pokemon_id = Pokemon.pokemon_id
-                        ORDER BY pokemon_id ASC;`;
+                        ORDER BY trainer_id ASC;`;
         const[rows] = await db.query(query);
         res.status(200).json(rows);
     } catch(error){
@@ -73,10 +73,9 @@ const deletePokemonTrainer = async (req, res) => {
     }
 };
 
-
 module.exports = {
     getPokemonTrainers,
     addPokemonToTrainer,
     getPokemonTrainerByID,
-    deletePokemonTrainer
+    deletePokemonTrainer,
 };
