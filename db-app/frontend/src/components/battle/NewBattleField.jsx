@@ -1,9 +1,72 @@
-const TRAINER_IDS = [1, 2, 3, 4, 5];
+import { useState, useEffect } from 'react';  
+import axios from 'axios';
 
-function NewBattleField({trainer_ids = TRAINER_IDS}) {
+
+
+function NewBattleField() {
+    
+    const [trainerIds, setTrainerIds] = useState([]);
+
+    //pulled from trainerPage
+    const fetchTrainerData = async() => {
+        console.log("Fetching trainer data");
+        try {
+            const url = import.meta.env.VITE_API_URL + 'pokemon/trainers'
+            console.log("Fetching data from:", url);
+            const response = await axios.get(url);
+            setTrainerIds(response.data);
+            console.log("response data:", response.data);
+            //alert(JSON.stringify(response.data));
+
+        } catch (error) {
+            console.error('Error fetching trainer data:', error);
+            if(error.response){
+                console.error('Error response:', error.response);
+            } else if(error.request){
+                console.error('Error request:', error.request);
+            }
+            else{
+                console.error('Error Message:', error.message);
+            }
+        };
+    };
+
+
+    useEffect(() => {
+        fetchTrainerData();
+    }, []);
+
+
+    function addBattle(formData){
+        try {
+            const url = import.meta.env.VITE_API_URL + "battles/create"
+            const data = {
+                trainer_1_id: formData.get('newBattleTrainer1Id'),
+                trainer_2_id: formData.get('newBattleTrainer2Id'),
+                winner: formData.get('Winner')
+            };
+            console.log(data);
+            axios.post(url,data)
+        } catch (error){
+            console.error('Error adding battle: ', error);
+            alert('Error adding battle')
+        }
+
+
+    };
+
+    const handleBattleSubmit = (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        addBattle(formData);
+        console.log("Battle submitted: ", formData);
+    }
+
+
+
     return (
         <div>
-            <form className="battle-input">
+            <form className="battle-input" onSubmit={handleBattleSubmit}>
                 <table>
                     <thead>
                         <tr>
@@ -16,15 +79,15 @@ function NewBattleField({trainer_ids = TRAINER_IDS}) {
                         <tr>
                             <td>
                                 <select name="newBattleTrainer1Id">
-                                    {trainer_ids.map((id, index) => (
-                                        <option key={index} value={id}>{id}</option>
+                                    {trainerIds.map((trainerIds) => (
+                                        <option key={trainerIds.trainer_id} value={trainerIds.trainer_id}>{trainerIds.trainer_id}</option>
                                     ))}
                                 </select>
                             </td>
                             <td>
                                 <select name="newBattleTrainer2Id">
-                                    {trainer_ids.map((id, index) => (
-                                        <option key={index} value={id}>{id}</option>
+                                    {trainerIds.map((trainerIds) => (
+                                        <option key={trainerIds.trainer_id} value={trainerIds.trainer_id}>{trainerIds.trainer_id}</option>
                                     ))}
                                 </select>
                             </td>

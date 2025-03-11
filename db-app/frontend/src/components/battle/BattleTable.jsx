@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function BattleRow({ battle }) {
     return (
         <tr>
@@ -24,7 +25,7 @@ export default function BattleTable({ battles }) {
                 </thead>
                 <tbody>
                     {battles.map(battle => (
-                        <BattleRow key={battle.id} battle={battle} />
+                        <BattleRow key={battle.battle_id} battle={battle} />
                     ))}
                 </tbody>
             </table>

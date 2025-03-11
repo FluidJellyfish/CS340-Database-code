@@ -5,7 +5,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
-const PORT = process.env.DB_PORT || 8500;
+const PORT = process.env.DB_PORT;
 
 // Middleware:
 
@@ -22,6 +22,7 @@ app.use("/api/pokemon", require("./routes/pokemonRoutes.js"));
 app.use("/api/pokemon/moves", require("./routes/movesPokemonRoutes"));
 app.use("/api/pokemon/trainers", require("./routes/trainerRoutes"));
 app.use("/api/moves", require("./routes/movesRoutes"));
+app.use("/api/battles", require("./routes/battleRoutes"));
 
 // Add your Connect DB Activitiy Code Below:
 const db = require('./database/config.js');
