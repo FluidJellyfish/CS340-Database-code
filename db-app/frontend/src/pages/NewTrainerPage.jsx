@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 
 
 function NewTrainerPage() {
@@ -69,17 +69,23 @@ function NewTrainerPage() {
         }
     };
 
+    let navigate = useNavigate(); 
+    const navigateToParent = () =>{ 
+        navigate('/');
+    };
 
     const handleAddTrainerSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         addTrainer(formData);
+        navigateToParent();
     };
 
     const handleAddPokemonToTrainerSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         addPokemonToTrainer(formData);
+        navigateToParent();
     };
 
 

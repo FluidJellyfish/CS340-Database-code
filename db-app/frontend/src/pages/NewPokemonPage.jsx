@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';  
+import { useState, useEffect } from 'react'; 
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import TypeInput from "../components/TypeInput";
@@ -18,6 +19,7 @@ function NewPokemonPage() {
             console.error('Error fetching pokemon data:', error);
         };
       };
+
     
     useEffect(() => {
         fetchPokemonData();
@@ -43,7 +45,7 @@ function NewPokemonPage() {
                 pokemonHealth: formData.get('newPokemonHealth')
             };
             axios.post(URL, data);
-            alert(`Pokemon ${data.name} added successfully!`);
+            alert(`Pokemon ${data.pokemonName} added successfully!`);
         } catch {
             console.error('Error adding Pokemon: ', error);
             alert('Error adding Pokemon');
@@ -66,17 +68,26 @@ function NewPokemonPage() {
       
     }
 
+    let navigate = useNavigate(); 
+    const navigateToParent = () =>{ 
+        navigate('/');
+    };
+
     const handleAddPokemonSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         addPokemon(formData);   
+        navigateToParent();
     };
 
     const handleAddMoveSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         addMoveToPokemon(formData);
+        navigateToParent();
     };
+
+    
 
 
     

@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom'; 
 import TypeInput from "../components/TypeInput";
 
 function NewMovePage() {
@@ -18,11 +18,16 @@ function NewMovePage() {
             alert('Error adding Move');
         }
     };
+    let navigate = useNavigate(); 
+    const navigateToParent = () =>{ 
+        navigate('/moves');
+    };
 
     const handleAddMoveSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         addMove(formData);   
+        navigateToParent();
     };
 
     return (
