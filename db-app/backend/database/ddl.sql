@@ -6,6 +6,7 @@ CREATE OR REPLACE TABLE Trainers (
     trainer_id int NOT NULL AUTO_INCREMENT,
     item_held varchar(50) NOT NULL,
     battle_record int(11) NOT NULL,
+    trainer_name varchar(15) NOT NULL,
     PRIMARY KEY (trainer_id)
 );
 

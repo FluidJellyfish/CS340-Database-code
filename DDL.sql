@@ -6,6 +6,7 @@ CREATE OR REPLACE TABLE Trainers (
     trainer_id int NOT NULL AUTO_INCREMENT,
     item_held varchar(50) NOT NULL,
     battle_record int(11) NOT NULL,
+    trainer_name varchar(15) NOT NULL,
     PRIMARY KEY (trainer_id)
 );
 
@@ -66,11 +67,10 @@ VALUES ("Farfetch'd", "Fighting", 80),
 ("Charmander", "Fire", 95);
 
 
-INSERT INTO Trainers (items_held, battle_record)
-VALUES ("Potion", 0),
-("Egg", 1),
-("Potion", 3),
-("Revive", 5);
+INSERT INTO Trainers (items_held, battle_record, trainer_name)
+VALUES ("Potion", 0, "Ash"),
+("Egg", 1, "Red"),
+("Revive", 5, "Amethio");
 
 INSERT INTO Moves (move_type, move_dmg, move_name)
 VALUES("Fighting", 10, "Rock Smash"),

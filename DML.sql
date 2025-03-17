@@ -17,7 +17,7 @@ INSERT INTO Pokemon_Moves(pokemon_id, move_id) VALUES (
 );
 
 -- displays trainers team based on trainer id. 
-SELECT Pokemon.pokemon_name, Trainers.items_held, Trainers.battle_record
+SELECT Pokemon.pokemon_name, Trainers.items_held, Trainers.battle_record, Trainers.trainer_name
 FROM Pokemon_Trainers
 INNER JOIN Pokemon ON Pokemon_Trainers.pokemon_id = Pokemon.pokemon_id
 INNER JOIN Trainers ON Pokemon_Trainers.trainer_id = Trainers.trainer_id
