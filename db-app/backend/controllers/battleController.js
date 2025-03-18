@@ -11,11 +11,11 @@ const lodash = require("lodash");
 
 
 const createBattle = async(req,res) => {
-    const {trainer_1_id, trainer_2_id, result} = req.body;
+    const {trainer_1_name, trainer_2_name, result} = req.body;
 
     try{
         const query = `INSERT INTO Battles(trainer_1_id, 
-        trainer_2_id, result) VALUES ('${trainer_1_id}', '${trainer_2_id}', '${result}');`;
+        trainer_2_id, result) VALUES ((SELECT trainer_id FROM Trainers WHERE trainer_name='${trainer_1_name}'), (SELECT trainer_id FROM Trainers WHERE trainer_name='${trainer_2_name}'), '${result}');`;
         const response = await db.query(query);
         res.status(201).json(response);
     } catch(error){
@@ -26,7 +26,10 @@ const createBattle = async(req,res) => {
 
 const getBattles = async(req, res) => {
     try{
-        const query = `SELECT * FROM Battles;`;
+        const query = `SELECT Battles.battle_id, Battles.trainer_1_id, t1.trainer_name AS t1name, Battles.trainer_2_id, t2.trainer_name AS t2name, Battles.result FROM Battles
+        INNER JOIN Trainers t1 ON Battles.trainer_1_id = t1.trainer_id
+        INNER JOIN Trainers t2 ON Battles.trainer_2_id = t2.trainer_id
+        ORDER BY battle_id ASC;`;
         const[rows] = await db.query(query);
         res.status(200).json(rows);
     } catch(error){

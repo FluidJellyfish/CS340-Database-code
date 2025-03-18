@@ -9,7 +9,7 @@ const {
 
 router.get("/", getPokemonTrainers);
 router.post("/create", addPokemonToTrainer);
-router.get("/:trainerID", getPokemonTrainerByID);
+router.get("/:trainerName", getPokemonTrainerByID);
 router.delete("/delete/:id", deletePokemonTrainer);
 
 

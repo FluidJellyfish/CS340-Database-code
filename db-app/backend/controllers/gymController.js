@@ -5,7 +5,8 @@ require("dotenv").config();
 const lodash = require("lodash");
 const getGyms = async (req, res) => {
     try {
-        const query = `SELECT Gyms.gym_id, Gyms.gym_leader_id FROM Gyms ORDER BY gym_id ASC;`;
+        const query = `SELECT Gyms.gym_id, Gyms.gym_leader_id, Trainers.trainer_name FROM Gyms 
+        LEFT JOIN Trainers on Trainers.Trainer_id = Gyms.gym_leader_id ORDER BY gym_id ASC;`;
         const [rows] = await db.query(query);
         res.status(200).json(rows);
     } catch (error) {

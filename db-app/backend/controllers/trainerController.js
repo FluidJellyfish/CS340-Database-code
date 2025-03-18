@@ -9,10 +9,10 @@ const lodash = require("lodash");
 
 const createTrainer = async (req, res) => {
     
-    const { items_held, battle_record } = req.body;
+    const { trainer_name, items_held, battle_record } = req.body;
     //console.log('Data recieved:', req.body);
     try{
-        const query = `INSERT INTO Trainers(items_held, battle_record) VALUES ('${items_held}', '${battle_record}');`;
+        const query = `INSERT INTO Trainers(trainer_name, item_held, battle_record) VALUES ('${trainer_name}','${items_held}', '${battle_record}');`;
         const response = await db.query(query);
         res.status(201).json(response);
     } catch (error){
@@ -37,7 +37,7 @@ const updateHeldItem = async (req, res) => {
     const {trainerId, newItemHeld} = req.body;
 
     try {
-        const id_query = await db.query(`UPDATE Trainers SET items_held = '${newItemHeld}' WHERE trainer_id = ${trainerId}`);
+        const id_query = await db.query(`UPDATE Trainers SET item_held = '${newItemHeld}' WHERE trainer_id = ${trainerId}`);
         
     } catch (error){
         //server side

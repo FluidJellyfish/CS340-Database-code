@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function NewGymField() {
-    const [trainer_ids, setTrainerIds] = useState(['NULL']);
+    const [trainer_names, setTrainerNames] = useState(['NULL']);
 
     const fetchTrainerData = async () => {
         try {
             const response = await axios.get(import.meta.env.VITE_API_URL + 'pokemon/trainers/');
-            setTrainerIds([{trainer_id:'NULL'}, ...response.data]);
+            setTrainerNames([{trainer_name:'NULL'}, ...response.data]);
         } catch (error) {
             console.error('Error fetching trainer data:', error);
         };
@@ -16,9 +16,9 @@ function NewGymField() {
     function addGym(formData) {
         try {
             const URL = import.meta.env.VITE_API_URL + 'gyms/create';
-            alert('Adding gym with leader ID: ' + formData.get('newGymLeaderId'));
+            alert('Adding gym with leader Name: ' + formData.get('newGymLeaderName'));
             const data = {
-                gymLeaderId: formData.get('newGymLeaderId')
+                gymLeaderName: formData.get('newGymLeaderName')
             };
             axios.post(URL, data);
 
@@ -37,7 +37,7 @@ function NewGymField() {
             <table>
                 <thead>
                     <tr>
-                        <th>Gym Leader ID</th>
+                        <th>Gym Leader Name</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,9 +48,9 @@ function NewGymField() {
                             const formData = new FormData(e.target);
                             addGym(formData);
                         }}>
-                            <select name="newGymLeaderId" >
-                                {trainer_ids.map((id, index) => (
-                                    <option key={index} value={id.trainer_id}>{id.trainer_id}</option>
+                            <select name="newGymLeaderName" >
+                                {trainer_names.map((name, index) => (
+                                    <option key={index} value={name.trainer_name}>{name.trainer_name}</option>
                                 ))}
                             </select>
                             <button type="submit">Add Gym</button>

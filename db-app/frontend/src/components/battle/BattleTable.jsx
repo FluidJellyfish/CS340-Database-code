@@ -4,8 +4,10 @@ function BattleRow({ battle }) {
         <tr>
         <td>{battle.id}</td>
         <td>{battle.trainer_1_id}</td>
+        <td>{battle.t1name}</td>
         <td>{battle.trainer_2_id}</td>
-        <td>{battle.result}</td>
+        <td>{battle.t2name}</td>
+        <td>{battle.result+1}</td>
         </tr>
     );
 }
@@ -19,7 +21,9 @@ export default function BattleTable({ battles }) {
                     <tr>
                         <th>ID</th>
                         <th>Trainer 1 ID</th>
+                        <th>Trainer 1 Name</th>
                         <th>Trainer 2 ID</th>
+                        <th>Trainer 2 Name</th>
                         <th>Result</th>
                     </tr>
                 </thead>

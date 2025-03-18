@@ -5,14 +5,14 @@ import { useNavigate } from "react-router-dom";
 
 function NewTrainerPage() {
 
-    const [trainerIds, setTrainerIds] = useState([]);
+    const [trainerNames, setTrainerNames] = useState([]);
     const [pokemonNames, setPokemonNames] = useState([]);
 
 
     const fetchTrainerData = async() => {
         try {
             const response = await axios.get(import.meta.env.VITE_API_URL + 'pokemon/trainers/');
-            setTrainerIds(response.data);
+            setTrainerNames(response.data);
             //alert(jsonify(response.data));
 
         } catch (error) {
@@ -40,6 +40,7 @@ function NewTrainerPage() {
             const URL = import.meta.env.VITE_API_URL + 'pokemon/trainers/create'
             //"//flip1.engr.oregonstate.edu:58675/api/pokemon/trainers/create";
             const data = {
+                trainer_name: formData.get('newTrainerName'),
                 items_held: formData.get('newTrainerHeldItems'),
                 battle_record: formData.get('newTrainerBattleRecord')
             };
@@ -58,8 +59,8 @@ function NewTrainerPage() {
         try {
             const URL = import.meta.env.VITE_API_URL + 'trainers/pokemon/create';
             const data = {
-                pokemonName: formData.get('newPokemonName'),
-                trainerID: formData.get('newPokemonTrainerID')
+                trainerName: formData.get('newPokemonTrainerName'),
+                pokemonName: formData.get('newPokemonName')
             };
             axios.post(URL, data);
             alert('Pokemon added to Trainer\'s team successfully!');
@@ -71,7 +72,7 @@ function NewTrainerPage() {
 
     let navigate = useNavigate(); 
     const navigateToParent = () =>{ 
-        navigate('/');
+        navigate('/trainers');
     };
 
     const handleAddTrainerSubmit = (event) => {
@@ -96,12 +97,14 @@ function NewTrainerPage() {
             <table>
                 <thead>
                     <tr>
+                        <th>Trainer Name</th>
                         <th>Held Items</th>
                         <th>Battle Record</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
+                        <td><input type="text" name="newTrainerName"/></td>
                         <td><input type="text" name="newTrainerHeldItems"/></td>
                         <td><input type="text" name ="newTrainerBattleRecord"/></td>
                     </tr>
@@ -115,7 +118,7 @@ function NewTrainerPage() {
                 <thead>
                     <tr>
                         <th>Pokemon</th>
-                        <th>Trainer ID</th>
+                        <th>Trainer Name</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,9 +131,9 @@ function NewTrainerPage() {
                     </select>
                     </td>
                     <td>
-                    <select name="newPokemonTrainerID">
-                        {trainerIds.map((trainerIds) => (
-                            <option key={trainerIds.trainer_id} value={trainerIds.trainer_id}>{trainerIds.trainer_id}</option>
+                    <select name="newPokemonTrainerName">
+                        {trainerNames.map((trainerNames) => (
+                            <option key={trainerNames.trainer_name} value={trainerNames.trainer_name}>{trainerNames.trainer_name}</option>
                         ))}
                     </select>
                     </td>

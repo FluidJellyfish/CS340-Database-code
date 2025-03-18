@@ -18,6 +18,7 @@ function PokemonTrainerRow({pokemonTrainer, fetchPokemonTrainerData}){
     return (
         <tr>
             <td>{pokemonTrainer.trainer_id}</td>
+            <td>{pokemonTrainer.trainer_name}</td>
             <td>{pokemonTrainer.pokemon_id}</td>
             <td>{pokemonTrainer.pokemon_name}</td>
             <td><button type = "button" onClick={() => handleDelete(pokemonTrainer.pokemon_trainer_id, fetchPokemonTrainerData)}>Delete</button> </td>
@@ -37,13 +38,13 @@ function NewTrainerButton() {
 export default function PokemonTrainerTable() {
     const [selectedTrainer, setSelectedTrainer] = useState('');
     const [pokemonTrainers, setPokemonTrainers] = useState([]);
-    const [uniqueTrainerIds, setUniqueTrainerIds] = useState([]);
+    const [uniqueTrainerNames, setUniqueTrainerNames] = useState([]);
 
     const fetchPokemonTrainerdata = async() => {
         try{
             const response = await axios.get(import.meta.env.VITE_API_URL + 'trainers/pokemon/');
             setPokemonTrainers(response.data);
-            setUniqueTrainerIds([...new Set(response.data.map(item => item.trainer_id))]);
+            setUniqueTrainerNames([...new Set(response.data.map(item => item.trainer_name))]);
         } catch(error){
             console.error('Error fetching pokemonTrainer data: ', error);
         }
@@ -59,7 +60,7 @@ export default function PokemonTrainerTable() {
             <form onSubmit={(e) => e.preventDefault()}>
                 <select value={selectedTrainer} onChange={handleChange}>
                     <option value="">-- All Trainers --</option>
-                    {uniqueTrainerIds.map(id => (
+                    {uniqueTrainerNames.map(id => (
                         <option key={id} value={id}>{id}</option>
                     ))}
                 </select>
@@ -95,7 +96,7 @@ export default function PokemonTrainerTable() {
 
     return (
         <div>
-            <TrainerFilterField trainerIds={uniqueTrainerIds}/>
+            <TrainerFilterField trainerIds={uniqueTrainerNames}/>
             <NewTrainerButton />
             <table>
                 <thead>

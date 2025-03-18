@@ -5,7 +5,8 @@ function TrainerRow({ trainer, fetchTrainerData }) {
     return (
         <tr>
         <td>{trainer.trainer_id}</td>
-        <td>{trainer.items_held}</td>
+        <td>{trainer.trainer_name}</td>
+        <td>{trainer.item_held}</td>
         <td><UpdateItemHeldField id={trainer.trainer_id} fetchTrainerData={fetchTrainerData} /></td>
         <td>{trainer.battle_record}</td>
         <td><UpdateBattleRecordField id={trainer.trainer_id} fetchTrainerData={fetchTrainerData} /></td>
@@ -90,7 +91,8 @@ export default function TrainerTable({ trainers, fetchTrainerData }) {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Items Held</th>
+                        <th>Trainer Name</th>
+                        <th>Item Held</th>
                         <th></th>
                         <th>Battle Record</th>
                         <th></th>

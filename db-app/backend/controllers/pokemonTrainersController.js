@@ -7,10 +7,10 @@ const lodash = require("lodash");
 
 const addPokemonToTrainer = async (req, res) => {
 
-    const { trainerID, pokemonName } = req.body
+    const { trainerName, pokemonName } = req.body
     try {
         const query = `INSERT INTO Pokemon_Trainers(trainer_id, pokemon_id) VALUES (
-            ${trainerID},
+            (SELECT Trainers.trainer_id FROM Trainers WHERE Trainers.trainer_name = '${trainerName}'),
             (SELECT Pokemon.pokemon_id FROM Pokemon WHERE Pokemon.pokemon_name = '${pokemonName}'));`;
 
         const response = await db.query(query);
@@ -26,7 +26,8 @@ const addPokemonToTrainer = async (req, res) => {
 
 const getPokemonTrainers = async(req, res) => {
     try{
-        const query = ` SELECT Pokemon_Trainers.pokemon_trainer_id, Pokemon_Trainers.trainer_id, Pokemon_Trainers.pokemon_id, Pokemon.pokemon_name FROM Pokemon_Trainers
+        const query = ` SELECT Pokemon_Trainers.pokemon_trainer_id, Trainers.trainer_name, Pokemon_Trainers.trainer_id, Pokemon_Trainers.pokemon_id, Pokemon.pokemon_name FROM Pokemon_Trainers
+                        INNER JOIN Trainers ON Pokemon_Trainers.trainer_id = Trainers.trainer_id
                         INNER JOIN Pokemon ON Pokemon_Trainers.pokemon_id = Pokemon.pokemon_id
                         ORDER BY trainer_id ASC;`;
         const[rows] = await db.query(query);
@@ -39,9 +40,10 @@ const getPokemonTrainers = async(req, res) => {
 
 const getPokemonTrainerByID = async (req, res) => {
     try{
-        const trainerID = req.params.trainerID;
-        const query = `SELECT Pokemon_Trainers.pokemon_trainer_id, Pokemon_Trainers.trainer_id, Pokemon_Trainers.pokemon_id, Pokemon.pokemon_name FROM Pokemon_Trainers
-        INNER JOIN Pokemon ON Pokemon_Trainers.pokemon_id = Pokemon.pokemon_id AND Pokemon_Trainers.trainer_id = ${trainerID}
+        const trainerName = req.params.trainerName;
+        const query = `SELECT Pokemon_Trainers.pokemon_trainer_id, Trainers.trainer_name, Pokemon_Trainers.trainer_id, Pokemon_Trainers.pokemon_id, Pokemon.pokemon_name FROM Pokemon_Trainers
+        INNER JOIN Trainers ON Pokemon_Trainers.trainer_id = Trainers.trainer_id AND Trainers.trainer_name = '${trainerName}'
+        INNER JOIN Pokemon ON Pokemon_Trainers.pokemon_id = Pokemon.pokemon_id 
         ORDER BY pokemon_id ASC;`;
         const [result] = await db.query(query);
 
@@ -55,13 +57,12 @@ const getPokemonTrainerByID = async (req, res) => {
     }
 }
 const deletePokemonTrainer = async (req, res) => {
-    const pokemonTrainerID = req.params.id;
-
+    const pokemonTrainerId = req.params.id;
     try {
 
         // Delete the Pokemon Trainer
         const [response] = await db.query(
-            `DELETE FROM Pokemon_Trainers WHERE pokemon_trainer_id = ${pokemonTrainerID};`
+            `DELETE FROM Pokemon_Trainers WHERE Pokemon_Trainers.pokemon_trainer_id =  ${pokemonTrainerId};`
         );
 
         console.log("Deleted", response.affectedRows, "rows from Pokemon_Trainers table");
